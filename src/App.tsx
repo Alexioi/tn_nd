@@ -1,7 +1,19 @@
-import { Button, Empty, Flex, Table, Upload } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  DatePicker,
+  Empty,
+  Flex,
+  Table,
+  Upload,
+} from "antd";
 import { read, utils, writeFile } from "xlsx";
 import { UploadOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import dayjs from "dayjs";
+import ruRU from "antd/locale/ru_RU";
+
+dayjs.locale("ru");
 
 const columns = [
   {
@@ -66,10 +78,34 @@ const columns = [
     dataIndex: "responsible",
     key: "responsible",
   },
+  {
+    title: "Действие",
+    dataIndex: "actions",
+    key: "actions",
+  },
 ];
 
 function App() {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<
+    {
+      key: number;
+      number: number;
+      designation: string;
+      name: string;
+      approvingOrganization: string;
+      approvingDate: string;
+      startDate: string;
+      endDate: string;
+      state: string;
+      status: string;
+      informationAboutChanges: string;
+      note: string;
+      responsible: string;
+      isEdible?: boolean;
+    }[]
+  >([]);
+
+  const [date, setDate] = useState("");
 
   async function parseExcelFile(file: File) {
     const data = await file.arrayBuffer();
@@ -105,8 +141,6 @@ function App() {
         };
       }),
     );
-
-    console.log(x);
   }
 
   function exportData() {
@@ -120,38 +154,97 @@ function App() {
   }
 
   return (
-    <Flex style={{ justifyContent: "center" }} vertical>
-      <Upload
-        onChange={({ file }) => {
-          if (file.status !== "error") {
-            return;
-          }
+    <ConfigProvider locale={ruRU}>
+      <Flex style={{ justifyContent: "center" }} vertical>
+        <Upload
+          onChange={({ file }) => {
+            if (file.status !== "error") {
+              return;
+            }
 
-          if (file.originFileObj === undefined) {
-            return;
-          }
+            if (file.originFileObj === undefined) {
+              return;
+            }
 
-          parseExcelFile(file.originFileObj);
-        }}
-      >
-        <Button icon={<UploadOutlined />}>Загрузить</Button>
-      </Upload>
-      <Button onClick={exportData}>📥 Скачать Excel файл</Button>
+            parseExcelFile(file.originFileObj);
+          }}
+        >
+          <Button icon={<UploadOutlined />}>Загрузить</Button>
+        </Upload>
+        <Button onClick={exportData}>📥 Скачать Excel файл</Button>
 
-      <Table
-        virtual
-        pagination={false}
-        dataSource={data}
-        columns={columns}
-        scroll={{ y: "130vh" }}
-        style={{ width: "100%" }}
-        size="small"
-        bordered
-        locale={{
-          emptyText: <Empty description="Нет данных" />,
-        }}
-      />
-    </Flex>
+        <Table
+          virtual
+          pagination={false}
+          dataSource={data.map((el, i) => {
+            if (el.isEdible) {
+              return {
+                ...el,
+                startDate: (
+                  <DatePicker
+                    defaultValue={dayjs(el.startDate, "DD/MM/YYYY")}
+                    onChange={(date) => {
+                      setDate(`${date?.format("DD/MM/YYYY")}`);
+                    }}
+                  />
+                ),
+                actions: (
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      setData(
+                        data.map((el, index) => {
+                          if (i === index) {
+                            return {
+                              ...el,
+                              startDate: date,
+                              isEdible: undefined,
+                            };
+                          }
+
+                          return { ...el };
+                        }),
+                      );
+                    }}
+                  >
+                    Сохранить
+                  </Button>
+                ),
+              };
+            }
+
+            return {
+              ...el,
+              actions: (
+                <Button
+                  onClick={() => {
+                    setData(
+                      data.map((el, index) => {
+                        if (i === index) {
+                          return { ...el, isEdible: true };
+                        }
+
+                        return { ...el, isEdible: undefined };
+                      }),
+                    );
+                  }}
+                >
+                  Изменить
+                </Button>
+              ),
+            };
+          })}
+          columns={columns}
+          scroll={{ y: "130vh" }}
+          style={{ width: "100%" }}
+          size="small"
+          bordered
+          locale={{
+            emptyText: <Empty description="Нет данных" />,
+          }}
+        />
+      </Flex>
+    </ConfigProvider>
   );
 }
 
