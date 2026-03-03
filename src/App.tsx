@@ -1,4 +1,4 @@
-import { Button, Flex, Table, Upload } from "antd";
+import { Button, Empty, Flex, Table, Upload } from "antd";
 import { read, utils, writeFile } from "xlsx";
 import { UploadOutlined } from "@ant-design/icons";
 import { useState } from "react";
@@ -121,7 +121,6 @@ function App() {
 
   return (
     <Flex style={{ justifyContent: "center" }} vertical>
-      {/* <div style={{ maxWidth: "1200px" }}> */}
       <Upload
         onChange={({ file }) => {
           if (file.status !== "error") {
@@ -147,8 +146,11 @@ function App() {
         scroll={{ y: "130vh" }}
         style={{ width: "100%" }}
         size="small"
+        bordered
+        locale={{
+          emptyText: <Empty description="Нет данных" />,
+        }}
       />
-      {/* </div> */}
     </Flex>
   );
 }
