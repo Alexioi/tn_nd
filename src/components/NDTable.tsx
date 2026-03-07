@@ -1,7 +1,7 @@
-import { Button, DatePicker, Empty, Table } from "antd";
-import { useState } from "react";
+import { Button, Empty, Table } from "antd";
 import dayjs from "dayjs";
 import type { Data } from "./UploudData";
+import { changeNDRow } from "./changeNDRow";
 
 const columns = [
   {
@@ -81,7 +81,21 @@ type Props = {
 };
 
 const NDTable = ({ data, setData }: Props) => {
-  const [date, setDate] = useState("");
+  const changeData = (index: number, date: string) => {
+    setData(
+      data.map((el, i) => {
+        if (i === index) {
+          return {
+            ...el,
+            startDate: date,
+            isEdible: undefined,
+          };
+        }
+
+        return { ...el };
+      }),
+    );
+  };
 
   return (
     <>
@@ -90,39 +104,7 @@ const NDTable = ({ data, setData }: Props) => {
         pagination={false}
         dataSource={data.map((el, i) => {
           if (el.isEdible) {
-            return {
-              ...el,
-              startDate: (
-                <DatePicker
-                  defaultValue={dayjs(el.startDate, "DD/MM/YYYY")}
-                  onChange={(date) => {
-                    setDate(`${date?.format("DD/MM/YYYY")}`);
-                  }}
-                />
-              ),
-              actions: (
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setData(
-                      data.map((el, index) => {
-                        if (i === index) {
-                          return {
-                            ...el,
-                            startDate: date,
-                            isEdible: undefined,
-                          };
-                        }
-
-                        return { ...el };
-                      }),
-                    );
-                  }}
-                >
-                  Сохранить
-                </Button>
-              ),
-            };
+            return changeNDRow({ item: el, index: i, changeData });
           }
 
           return {

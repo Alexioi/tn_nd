@@ -70,5 +70,5 @@ const UploadData = ({ setData }: Props) => {
   );
 };
 
-export type { Data };
+export type { Data, Item };
 export { UploadData };
