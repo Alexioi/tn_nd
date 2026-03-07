@@ -1,70 +1,11 @@
-import {
-  Button,
-  ConfigProvider,
-  Flex,
-  // Upload,
-} from "antd";
-import { read, utils, writeFile } from "xlsx";
-// import { UploadOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Flex } from "antd";
+import { utils, writeFile } from "xlsx";
 import { useState } from "react";
 import ruRU from "antd/locale/ru_RU";
-import { NDTable } from "./components";
+import { NDTable, UploadData, type Data } from "./components";
 
-function App() {
-  const [data, setData] = useState<
-    {
-      key: number;
-      number: number;
-      designation: string;
-      name: string;
-      approvingOrganization: string;
-      approvingDate: string;
-      startDate: string;
-      endDate: string;
-      state: string;
-      status: string;
-      informationAboutChanges: string;
-      note: string;
-      responsible: string;
-      isEdible?: boolean;
-    }[]
-  >([]);
-
-  async function parseExcelFile(file: File) {
-    const data = await file.arrayBuffer();
-
-    const workbook = read(data);
-
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-
-    const x = utils
-      .sheet_to_txt(worksheet)
-      .split("\n")
-      .map((el) => {
-        return el.split("\t");
-      });
-
-    setData(
-      x.map((el, i) => {
-        return {
-          key: i,
-          number: i + 1,
-          designation: el[0],
-          name: el[1],
-          approvingOrganization: el[2],
-          approvingDate: el[3],
-          startDate: el[4],
-          endDate: el[5],
-          state: el[6],
-          status: el[7],
-          informationAboutChanges: el[8],
-          note: el[9],
-          responsible: el[10],
-        };
-      }),
-    );
-  }
+const App = () => {
+  const [data, setData] = useState<Data>([]);
 
   function exportData() {
     const worksheet = utils.json_to_sheet(data);
@@ -78,32 +19,15 @@ function App() {
 
   return (
     <ConfigProvider locale={ruRU}>
+      <NDTable data={data} setData={setData} />
+
       <Flex style={{ justifyContent: "center" }} vertical>
-        <input
-          // beforeUpload={() => false}
-          type="file"
-          onChange={(event) => {
-            // if (!(file.status === "error" || file.status === "done")) {
-            //   return;
-            // }
+        <UploadData setData={setData} />
 
-            console.log(event.target.files?.[0]);
-
-            if (event.target.files?.[0] === undefined) {
-              return;
-            }
-
-            parseExcelFile(event.target.files?.[0]);
-          }}
-        />
-        {/* <Button icon={<UploadOutlined />}>Загрузить</Button> */}
-
-        <Button onClick={exportData}>📥 Скачать Excel файл</Button>
-
-        <NDTable data={data} setData={setData} />
+        <Button onClick={exportData}>Скачать Excel файл</Button>
       </Flex>
     </ConfigProvider>
   );
-}
+};
 
 export default App;

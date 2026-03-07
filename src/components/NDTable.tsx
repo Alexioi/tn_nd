@@ -1,6 +1,7 @@
 import { Button, DatePicker, Empty, Table } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
+import type { Data } from "./UploudData";
 
 const columns = [
   {
@@ -74,23 +75,6 @@ const columns = [
 
 dayjs.locale("ru");
 
-type Data = {
-  key: number;
-  number: number;
-  designation: string;
-  name: string;
-  approvingOrganization: string;
-  approvingDate: string;
-  startDate: string;
-  endDate: string;
-  state: string;
-  status: string;
-  informationAboutChanges: string;
-  note: string;
-  responsible: string;
-  isEdible?: boolean;
-}[];
-
 type Props = {
   data: Data;
   setData(data: Data): void;
@@ -162,8 +146,8 @@ const NDTable = ({ data, setData }: Props) => {
         };
       })}
       columns={columns}
-      scroll={{ y: "130vh" }}
-      style={{ width: "100%" }}
+      scroll={{ y: 500 }}
+      style={{ width: "100%", whiteSpace: "pre-wrap" }}
       size="small"
       bordered
       locale={{
