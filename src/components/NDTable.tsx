@@ -84,76 +84,102 @@ const NDTable = ({ data, setData }: Props) => {
   const [date, setDate] = useState("");
 
   return (
-    <Table
-      virtual
-      pagination={false}
-      dataSource={data.map((el, i) => {
-        if (el.isEdible) {
+    <>
+      <Table
+        virtual
+        pagination={false}
+        dataSource={data.map((el, i) => {
+          if (el.isEdible) {
+            return {
+              ...el,
+              startDate: (
+                <DatePicker
+                  defaultValue={dayjs(el.startDate, "DD/MM/YYYY")}
+                  onChange={(date) => {
+                    setDate(`${date?.format("DD/MM/YYYY")}`);
+                  }}
+                />
+              ),
+              actions: (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setData(
+                      data.map((el, index) => {
+                        if (i === index) {
+                          return {
+                            ...el,
+                            startDate: date,
+                            isEdible: undefined,
+                          };
+                        }
+
+                        return { ...el };
+                      }),
+                    );
+                  }}
+                >
+                  Сохранить
+                </Button>
+              ),
+            };
+          }
+
           return {
             ...el,
-            startDate: (
-              <DatePicker
-                defaultValue={dayjs(el.startDate, "DD/MM/YYYY")}
-                onChange={(date) => {
-                  setDate(`${date?.format("DD/MM/YYYY")}`);
-                }}
-              />
-            ),
             actions: (
               <Button
-                type="primary"
                 onClick={() => {
                   setData(
                     data.map((el, index) => {
                       if (i === index) {
-                        return {
-                          ...el,
-                          startDate: date,
-                          isEdible: undefined,
-                        };
+                        return { ...el, isEdible: true };
                       }
 
-                      return { ...el };
+                      return { ...el, isEdible: undefined };
                     }),
                   );
                 }}
               >
-                Сохранить
+                Изменить
               </Button>
             ),
           };
-        }
-
-        return {
-          ...el,
-          actions: (
-            <Button
-              onClick={() => {
-                setData(
-                  data.map((el, index) => {
-                    if (i === index) {
-                      return { ...el, isEdible: true };
-                    }
-
-                    return { ...el, isEdible: undefined };
-                  }),
-                );
-              }}
-            >
-              Изменить
-            </Button>
-          ),
-        };
-      })}
-      columns={columns}
-      scroll={{ y: 500 }}
-      style={{ width: "100%", whiteSpace: "pre-wrap" }}
-      size="small"
-      bordered
-      locale={{
-        emptyText: <Empty description="Нет данных" />,
-      }}
-    />
+        })}
+        columns={columns}
+        scroll={{ y: 400 }}
+        style={{ width: "100%", whiteSpace: "pre-wrap" }}
+        size="small"
+        bordered
+        locale={{
+          emptyText: <Empty description="Нет данных" />,
+        }}
+      />
+      <Button
+        onClick={() => {
+          setData([
+            ...data,
+            {
+              key: data.length,
+              number: data.length + 1,
+              designation: "",
+              name: "",
+              approvingOrganization: "",
+              approvingDate: "",
+              startDate: "",
+              endDate: "",
+              state: "",
+              status: "",
+              informationAboutChanges: "",
+              note: "",
+              responsible: "",
+            },
+          ]);
+        }}
+      >
+        Добавить НД
+      </Button>
+    </>
   );
 };
 

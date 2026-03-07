@@ -8,7 +8,23 @@ const App = () => {
   const [data, setData] = useState<Data>([]);
 
   function exportData() {
-    const worksheet = utils.json_to_sheet(data);
+    const worksheet = utils.aoa_to_sheet(
+      data.map((el) => {
+        return [
+          el.designation,
+          el.name,
+          el.approvingOrganization,
+          el.approvingDate,
+          el.startDate,
+          el.endDate,
+          el.state,
+          el.status,
+          el.informationAboutChanges,
+          el.note,
+          el.responsible,
+        ];
+      }),
+    );
 
     const workbook = utils.book_new();
 
@@ -19,9 +35,9 @@ const App = () => {
 
   return (
     <ConfigProvider locale={ruRU}>
-      <NDTable data={data} setData={setData} />
+      <Flex style={{ justifyContent: "center" }} gap={20} vertical>
+        <NDTable data={data} setData={setData} />
 
-      <Flex style={{ justifyContent: "center" }} vertical>
         <UploadData setData={setData} />
 
         <Button onClick={exportData}>Скачать Excel файл</Button>
