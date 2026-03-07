@@ -1,89 +1,14 @@
 import {
   Button,
   ConfigProvider,
-  DatePicker,
-  Empty,
   Flex,
-  Table,
-  Upload,
+  // Upload,
 } from "antd";
 import { read, utils, writeFile } from "xlsx";
-import { UploadOutlined } from "@ant-design/icons";
+// import { UploadOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import dayjs from "dayjs";
 import ruRU from "antd/locale/ru_RU";
-
-dayjs.locale("ru");
-
-const columns = [
-  {
-    title: "№",
-    dataIndex: "number",
-    key: "number",
-  },
-  {
-    title: "Обозначение НД",
-    dataIndex: "designation",
-    key: "designation",
-  },
-  {
-    title: "Наименование НД",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Орган/оганизация утвердивший НД",
-    dataIndex: "approvingOrganization",
-    key: "approvingOrganization",
-  },
-  {
-    title: "Дата утверждения",
-    dataIndex: "approvingDate",
-    key: "approvingDate",
-  },
-  {
-    title: "Дата начала действия",
-    dataIndex: "startDate",
-    key: "startDate",
-  },
-  {
-    title: "Дата окончания действия",
-    dataIndex: "endDate",
-    key: "endDate",
-  },
-  {
-    title: "Состояние НД",
-    dataIndex: "state",
-    key: "state",
-  },
-  {
-    title: "Статус НД",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "Сведения об изменениях",
-    dataIndex: "informationAboutChanges",
-    key: "informationAboutChanges",
-  },
-
-  {
-    title: "Примечание",
-    dataIndex: "note",
-    key: "note",
-  },
-  {
-    title:
-      "Структурное подразделение, отвественное за исполнение требований НД",
-    dataIndex: "responsible",
-    key: "responsible",
-  },
-  {
-    title: "Действие",
-    dataIndex: "actions",
-    key: "actions",
-  },
-];
+import { NDTable } from "./components";
 
 function App() {
   const [data, setData] = useState<
@@ -104,8 +29,6 @@ function App() {
       isEdible?: boolean;
     }[]
   >([]);
-
-  const [date, setDate] = useState("");
 
   async function parseExcelFile(file: File) {
     const data = await file.arrayBuffer();
@@ -156,93 +79,28 @@ function App() {
   return (
     <ConfigProvider locale={ruRU}>
       <Flex style={{ justifyContent: "center" }} vertical>
-        <Upload
-          onChange={({ file }) => {
-            if (file.status !== "error") {
+        <input
+          // beforeUpload={() => false}
+          type="file"
+          onChange={(event) => {
+            // if (!(file.status === "error" || file.status === "done")) {
+            //   return;
+            // }
+
+            console.log(event.target.files?.[0]);
+
+            if (event.target.files?.[0] === undefined) {
               return;
             }
 
-            if (file.originFileObj === undefined) {
-              return;
-            }
-
-            parseExcelFile(file.originFileObj);
-          }}
-        >
-          <Button icon={<UploadOutlined />}>Загрузить</Button>
-        </Upload>
-        <Button onClick={exportData}>📥 Скачать Excel файл</Button>
-
-        <Table
-          virtual
-          pagination={false}
-          dataSource={data.map((el, i) => {
-            if (el.isEdible) {
-              return {
-                ...el,
-                startDate: (
-                  <DatePicker
-                    defaultValue={dayjs(el.startDate, "DD/MM/YYYY")}
-                    onChange={(date) => {
-                      setDate(`${date?.format("DD/MM/YYYY")}`);
-                    }}
-                  />
-                ),
-                actions: (
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setData(
-                        data.map((el, index) => {
-                          if (i === index) {
-                            return {
-                              ...el,
-                              startDate: date,
-                              isEdible: undefined,
-                            };
-                          }
-
-                          return { ...el };
-                        }),
-                      );
-                    }}
-                  >
-                    Сохранить
-                  </Button>
-                ),
-              };
-            }
-
-            return {
-              ...el,
-              actions: (
-                <Button
-                  onClick={() => {
-                    setData(
-                      data.map((el, index) => {
-                        if (i === index) {
-                          return { ...el, isEdible: true };
-                        }
-
-                        return { ...el, isEdible: undefined };
-                      }),
-                    );
-                  }}
-                >
-                  Изменить
-                </Button>
-              ),
-            };
-          })}
-          columns={columns}
-          scroll={{ y: "130vh" }}
-          style={{ width: "100%" }}
-          size="small"
-          bordered
-          locale={{
-            emptyText: <Empty description="Нет данных" />,
+            parseExcelFile(event.target.files?.[0]);
           }}
         />
+        {/* <Button icon={<UploadOutlined />}>Загрузить</Button> */}
+
+        <Button onClick={exportData}>📥 Скачать Excel файл</Button>
+
+        <NDTable data={data} setData={setData} />
       </Flex>
     </ConfigProvider>
   );
