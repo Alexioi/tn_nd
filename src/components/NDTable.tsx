@@ -1,6 +1,6 @@
 import { Button, Empty, Table } from "antd";
 import dayjs from "dayjs";
-import type { Data } from "./UploudData";
+import type { Data, Item } from "./UploudData";
 import { changeNDRow } from "./changeNDRow";
 
 const columns = [
@@ -81,13 +81,12 @@ type Props = {
 };
 
 const NDTable = ({ data, setData }: Props) => {
-  const changeData = (index: number, date: string) => {
+  const changeData = (index: number, item: Item) => {
     setData(
       data.map((el, i) => {
         if (i === index) {
           return {
-            ...el,
-            startDate: date,
+            ...item,
             isEdible: undefined,
           };
         }
