@@ -56,30 +56,38 @@ const UploadData = ({ data, setData }: Props) => {
         };
       });
 
-    const newFileData = fileData.reduce<any>((acc, el) => {
-      if (
-        data.find((subEl) => {
-          return subEl.designation === el.designation;
-        })
-      ) {
-        return acc;
+    const log: string[] = [];
+
+    const newFileData = fileData.reduce<any[]>((acc, el) => {
+      const item = data.find((subEl) => {
+        return subEl.designation === el.designation;
+      });
+
+      if (item === undefined) {
+        log.push(`Добавлен НД ${el.designation}`);
+
+        return [...acc, el];
+      }
+
+      if (el.name !== item.name) {
+        log.push(
+          `Изменен НД ${el.designation} имя c ${item.name} => ${el.name}`,
+        );
+
+        // return [...acc, el];
       }
 
       return [...acc, el];
+
+      // return acc;
     }, []);
 
-    console.log([
-      ...history,
-      newFileData.map((el: any) => `Добавлен НД ${el.designation}`),
-    ]);
+    console.log([...history, log]);
 
-    setHistory([
-      ...history,
-      newFileData.map((el: any) => `Добавлен НД ${el.designation}`),
-    ]);
+    setHistory([...history, log]);
 
     setData(
-      [...data, ...newFileData].map((el, i) => {
+      newFileData.map((el, i) => {
         return { ...el, key: i, number: i + 1 };
       }),
     );
