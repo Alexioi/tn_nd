@@ -1,11 +1,12 @@
-import { Button, ConfigProvider, Flex } from "antd";
+import { Button, ConfigProvider, Flex, Tabs } from "antd";
 import { utils, writeFile } from "xlsx";
 import { useState } from "react";
 import ruRU from "antd/locale/ru_RU";
-import { NDTable, UploadData, type Data } from "./components";
+import { NDTable, UploadData, UploadDB, type Data } from "./components";
 
 const App = () => {
   const [data, setData] = useState<Data>([]);
+  const [tabKey, setTabKey] = useState("1");
 
   function exportData() {
     const worksheet = utils.aoa_to_sheet(
@@ -35,13 +36,41 @@ const App = () => {
 
   return (
     <ConfigProvider locale={ruRU}>
-      <Flex style={{ justifyContent: "center" }} gap={20} vertical>
-        <NDTable data={data} setData={setData} />
+      <Tabs
+        activeKey={tabKey}
+        items={[
+          {
+            key: "1",
+            label: "Список НД",
+            children: (
+              <Flex style={{ justifyContent: "center" }} gap={20} vertical>
+                <NDTable data={data} setData={setData} />
 
-        <UploadData setData={setData} />
+                <UploadDB setData={setData} />
 
-        <Button onClick={exportData}>Скачать Excel файл</Button>
-      </Flex>
+                <Button onClick={exportData}>Скачать Excel файл</Button>
+              </Flex>
+            ),
+          },
+          {
+            key: "2",
+            label: "Импорт",
+            children: (
+              <>
+                <UploadData setData={setData} />
+              </>
+            ),
+          },
+          {
+            key: "3",
+            label: "Настройки",
+            children: 1,
+          },
+        ]}
+        onChange={(key) => {
+          setTabKey(key);
+        }}
+      />
     </ConfigProvider>
   );
 };
