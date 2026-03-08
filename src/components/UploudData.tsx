@@ -1,6 +1,7 @@
-import { Button, Upload } from "antd";
+import { Button, Card, Flex, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx";
+import { useState } from "react";
 
 type Item = {
   key: number;
@@ -22,25 +23,25 @@ type Item = {
 type Data = Item[];
 
 type Props = {
+  data: Data;
   setData(data: Data): void;
 };
 
-const UploadData = ({ setData }: Props) => {
-  const parseExcelFile = async (file: File) => {
-    const data = await file.arrayBuffer();
+const UploadData = ({ data, setData }: Props) => {
+  const [history, setHistory] = useState<string[][]>([]);
 
-    const workbook = read(data);
+  const parseExcelFile = async (file: File) => {
+    const excelData = await file.arrayBuffer();
+
+    const workbook = read(excelData);
 
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
 
-    const x: any[] = utils.sheet_to_json(worksheet, { header: 1 });
-
-    setData(
-      x.map((el, i) => {
+    const fileData = utils
+      .sheet_to_json(worksheet, { header: 1 })
+      .map((el: any) => {
         return {
-          key: i,
-          number: i + 1,
           designation: el[0],
           name: el[1],
           approvingOrganization: el[2],
@@ -53,20 +54,59 @@ const UploadData = ({ setData }: Props) => {
           note: el[9],
           responsible: el[10],
         };
+      });
+
+    const newFileData = fileData.reduce<any>((acc, el) => {
+      if (
+        data.find((subEl) => {
+          return subEl.designation === el.designation;
+        })
+      ) {
+        return acc;
+      }
+
+      return [...acc, el];
+    }, []);
+
+    console.log([
+      ...history,
+      newFileData.map((el: any) => `Добавлен НД ${el.designation}`),
+    ]);
+
+    setHistory([
+      ...history,
+      newFileData.map((el: any) => `Добавлен НД ${el.designation}`),
+    ]);
+
+    setData(
+      [...data, ...newFileData].map((el, i) => {
+        return { ...el, key: i, number: i + 1 };
       }),
     );
   };
 
   return (
-    <Upload
-      beforeUpload={(file) => {
-        parseExcelFile(file);
+    <>
+      <Upload
+        beforeUpload={(file) => {
+          parseExcelFile(file);
 
-        return false;
-      }}
-    >
-      <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
-    </Upload>
+          return false;
+        }}
+      >
+        <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
+      </Upload>
+
+      {history.map((el, i) => {
+        return (
+          <Flex gap={10} vertical key={i}>
+            {el.map((subEl, i) => {
+              return <Card key={i}>{subEl}</Card>;
+            })}
+          </Flex>
+        );
+      })}
+    </>
   );
 };
 

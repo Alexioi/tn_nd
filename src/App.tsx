@@ -57,7 +57,7 @@ const App = () => {
             label: "Импорт",
             children: (
               <>
-                <UploadData setData={setData} />
+                <UploadData data={data} setData={setData} />
               </>
             ),
           },

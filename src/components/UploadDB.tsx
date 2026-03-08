@@ -65,7 +65,7 @@ const UploadDB = ({ setData }: Props) => {
         return false;
       }}
     >
-      <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
+      <Button icon={<UploadOutlined />}>Загрузить базу данных</Button>
     </Upload>
   );
 };
