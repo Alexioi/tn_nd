@@ -26,6 +26,7 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
     item.informationAboutChanges,
   );
   const [note, setNote] = useState(item.note);
+  const [responsible, setResponsible] = useState(item.responsible);
 
   return {
     ...item,
@@ -109,6 +110,14 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
         }}
       />
     ),
+    responsible: (
+      <TextArea
+        defaultValue={responsible}
+        onChange={(date) => {
+          setResponsible(date.target.value);
+        }}
+      />
+    ),
     actions: (
       <Button
         type="primary"
@@ -125,6 +134,7 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
             status,
             informationAboutChanges,
             note,
+            responsible,
           });
         }}
       >
