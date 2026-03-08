@@ -19,6 +19,13 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
     item.approvingOrganization,
   );
   const [approvingDate, setApprovingDate] = useState(item.approvingDate);
+  const [endDate, setEndDate] = useState(item.endDate);
+  const [state, setState] = useState(item.state);
+  const [status, setStatus] = useState(item.status);
+  const [informationAboutChanges, setInformationAboutChanges] = useState(
+    item.informationAboutChanges,
+  );
+  const [note, setNote] = useState(item.note);
 
   return {
     ...item,
@@ -62,6 +69,46 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
         }}
       />
     ),
+    endDate: (
+      <TextArea
+        defaultValue={endDate}
+        onChange={(date) => {
+          setEndDate(date.target.value);
+        }}
+      />
+    ),
+    state: (
+      <TextArea
+        defaultValue={state}
+        onChange={(date) => {
+          setState(date.target.value);
+        }}
+      />
+    ),
+    status: (
+      <TextArea
+        defaultValue={status}
+        onChange={(date) => {
+          setStatus(date.target.value);
+        }}
+      />
+    ),
+    informationAboutChanges: (
+      <TextArea
+        defaultValue={informationAboutChanges}
+        onChange={(date) => {
+          setInformationAboutChanges(date.target.value);
+        }}
+      />
+    ),
+    note: (
+      <TextArea
+        defaultValue={note}
+        onChange={(date) => {
+          setNote(date.target.value);
+        }}
+      />
+    ),
     actions: (
       <Button
         type="primary"
@@ -73,6 +120,11 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
             name,
             approvingOrganization,
             approvingDate,
+            endDate,
+            state,
+            status,
+            informationAboutChanges,
+            note,
           });
         }}
       >
