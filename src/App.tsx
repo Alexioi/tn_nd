@@ -48,7 +48,7 @@ const App = () => {
 
                 <UploadDB setData={setData} />
 
-                <Button onClick={exportData}>Скачать Excel файл</Button>
+                <Button onClick={exportData}>Скачать базу данных</Button>
               </Flex>
             ),
           },
