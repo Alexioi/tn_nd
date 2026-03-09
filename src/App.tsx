@@ -2,11 +2,12 @@ import { Button, ConfigProvider, Flex, Tabs } from "antd";
 import { utils, writeFile } from "xlsx";
 import { useState } from "react";
 import ruRU from "antd/locale/ru_RU";
+
+import "./style.css";
 import { NDTable, UploadData, UploadDB, type Data } from "./components";
 
 const App = () => {
   const [data, setData] = useState<Data>([]);
-  const [tabKey, setTabKey] = useState("1");
 
   function exportData() {
     const worksheet = utils.aoa_to_sheet(
@@ -35,9 +36,17 @@ const App = () => {
   }
 
   return (
-    <ConfigProvider locale={ruRU}>
+    <ConfigProvider
+      locale={ruRU}
+      theme={{
+        components: {
+          Table: {
+            borderColor: "#000000",
+          },
+        },
+      }}
+    >
       <Tabs
-        activeKey={tabKey}
         items={[
           {
             key: "1",
@@ -67,9 +76,6 @@ const App = () => {
             children: 1,
           },
         ]}
-        onChange={(key) => {
-          setTabKey(key);
-        }}
       />
     </ConfigProvider>
   );

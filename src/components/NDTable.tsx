@@ -8,68 +8,96 @@ const columns = [
     title: "№",
     dataIndex: "number",
     key: "number",
+    fixed: true,
+    width: 50,
+    align: "center",
   },
   {
     title: "Обозначение НД",
     dataIndex: "designation",
     key: "designation",
+    fixed: true,
+    width: 250,
+    align: "center",
   },
   {
     title: "Наименование НД",
     dataIndex: "name",
     key: "name",
+    width: 250,
+    align: "center",
   },
   {
     title: "Орган/оганизация утвердивший НД",
     dataIndex: "approvingOrganization",
     key: "approvingOrganization",
+    width: 200,
+    align: "center",
   },
   {
     title: "Дата утверждения",
     dataIndex: "approvingDate",
     key: "approvingDate",
+    width: 150,
+    align: "center",
   },
   {
     title: "Дата начала действия",
     dataIndex: "startDate",
     key: "startDate",
+    width: 150,
+    align: "center",
   },
   {
     title: "Дата окончания действия",
     dataIndex: "endDate",
     key: "endDate",
+    width: 150,
+    align: "center",
   },
   {
     title: "Состояние НД",
     dataIndex: "state",
     key: "state",
+    width: 150,
+    align: "center",
   },
   {
     title: "Статус НД",
     dataIndex: "status",
     key: "status",
+    width: 100,
+    align: "center",
   },
   {
     title: "Сведения об изменениях",
     dataIndex: "informationAboutChanges",
     key: "informationAboutChanges",
+    width: 250,
+    align: "center",
   },
-
   {
     title: "Примечание",
     dataIndex: "note",
     key: "note",
+    width: 250,
+    align: "center",
   },
   {
     title:
       "Структурное подразделение, отвественное за исполнение требований НД",
     dataIndex: "responsible",
     key: "responsible",
+    width: 200,
+    align: "center",
   },
   {
     title: "Действие",
     dataIndex: "actions",
     key: "actions",
+    fixed: "end",
+    width: 110,
+    align: "center",
   },
 ];
 
@@ -101,6 +129,15 @@ const NDTable = ({ data, setData }: Props) => {
       <Table
         virtual
         pagination={false}
+        rowClassName={(record) => {
+          if (typeof record.note === "string") {
+            return record.note.toLocaleLowerCase().includes("отменено")
+              ? "row-color-warning"
+              : "";
+          }
+
+          return "";
+        }}
         dataSource={data.map((el, i) => {
           if (el.isEdible) {
             return changeNDRow({ item: el, index: i, changeData });
@@ -127,8 +164,9 @@ const NDTable = ({ data, setData }: Props) => {
             ),
           };
         })}
+        // @ts-ignore
         columns={columns}
-        scroll={{ y: 400 }}
+        scroll={{ x: 2000, y: 400 }}
         style={{ width: "100%", whiteSpace: "pre-wrap" }}
         size="small"
         bordered
