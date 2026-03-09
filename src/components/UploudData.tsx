@@ -167,6 +167,7 @@ const UploadData = ({ data, setData }: Props) => {
         {history.map((el, i) => {
           return (
             <Collapse
+              key={i}
               items={[
                 {
                   key: i,
@@ -175,7 +176,7 @@ const UploadData = ({ data, setData }: Props) => {
                     el.length === 0 ? (
                       "Не удалось найти новые данные"
                     ) : (
-                      <Flex gap={10} vertical key={i}>
+                      <Flex gap={10} vertical>
                         {el.map((subEl, i) => {
                           return (
                             <Card hoverable key={i}>

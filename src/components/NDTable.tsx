@@ -66,7 +66,7 @@ const columns = [
     title: "Статус НД",
     dataIndex: "status",
     key: "status",
-    width: 100,
+    width: 200,
     align: "center",
   },
   {

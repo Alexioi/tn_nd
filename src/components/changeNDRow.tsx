@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input } from "antd";
+import { Button, DatePicker, Input, Select } from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
 
@@ -87,10 +87,15 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
       />
     ),
     status: (
-      <TextArea
-        defaultValue={status}
-        onChange={(date) => {
-          setStatus(date.target.value);
+      <Select
+        style={{ width: "100%" }}
+        value={status}
+        options={[
+          { value: "1", label: "обязательный" },
+          { value: "2", label: "не обязательный" },
+        ]}
+        onSelect={(_, { label }) => {
+          setStatus(label);
         }}
       />
     ),
