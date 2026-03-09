@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Upload } from "antd";
+import { Button, Card, Collapse, Flex, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx";
 import { useState } from "react";
@@ -58,6 +58,76 @@ const UploadData = ({ data, setData }: Props) => {
 
     const log: string[] = [];
 
+    const changeData = data.reduce<any[]>((acc, el) => {
+      const item = fileData.find((subEl) => {
+        return subEl.designation === el.designation;
+      });
+
+      if (item === undefined) {
+        return [...acc, el];
+      }
+
+      const logStrings = [];
+
+      if (el.name !== item.name) {
+        logStrings.push(`"Наименование НД": ${el.name} => ${item.name}`);
+      }
+
+      if (el.approvingOrganization !== item.approvingOrganization) {
+        logStrings.push(
+          `"Орган/оганизация утвердивший НД": ${el.approvingOrganization} => ${item.approvingOrganization}`,
+        );
+      }
+
+      if (el.approvingDate !== item.approvingDate) {
+        logStrings.push(
+          `"Дата утверждения": ${el.approvingDate} => ${item.approvingDate}`,
+        );
+      }
+
+      if (el.startDate !== item.startDate) {
+        logStrings.push(
+          `"Дата начала действия": ${el.startDate} => ${item.startDate}`,
+        );
+      }
+
+      if (el.endDate !== item.endDate) {
+        logStrings.push(
+          `"Дата окончания действия": ${el.endDate} => ${item.endDate}`,
+        );
+      }
+
+      if (el.state !== item.state) {
+        logStrings.push(`"Состояние НД": ${el.state} => ${item.state}`);
+      }
+
+      if (el.status !== item.status) {
+        logStrings.push(`"Статус НД": ${el.status} => ${item.status}`);
+      }
+
+      if (el.informationAboutChanges !== item.informationAboutChanges) {
+        logStrings.push(
+          `"Сведения об изменениях": ${el.informationAboutChanges} => ${item.informationAboutChanges}`,
+        );
+      }
+
+      if (el.note !== item.note) {
+        logStrings.push(`"Примечание": ${el.note} => ${item.note}`);
+      }
+
+      if (el.designation !== item.designation) {
+        logStrings.push(
+          `"Структурное подразделение, отвественное за исполнение требований НД": ${el.designation} => ${item.designation}`,
+        );
+      }
+
+      if (logStrings.length !== 0) {
+        log.push([`Изменен НД ${el.number}`, ...logStrings].join(" | "));
+      }
+
+      return [...acc, item];
+    }, []);
+
     const newFileData = fileData.reduce<any[]>((acc, el) => {
       const item = data.find((subEl) => {
         return subEl.designation === el.designation;
@@ -69,25 +139,13 @@ const UploadData = ({ data, setData }: Props) => {
         return [...acc, el];
       }
 
-      if (el.name !== item.name) {
-        log.push(
-          `Изменен НД ${el.designation} имя c ${item.name} => ${el.name}`,
-        );
-
-        // return [...acc, el];
-      }
-
-      return [...acc, el];
-
-      // return acc;
+      return acc;
     }, []);
-
-    console.log([...history, log]);
 
     setHistory([...history, log]);
 
     setData(
-      newFileData.map((el, i) => {
+      [...changeData, ...newFileData].map((el, i) => {
         return { ...el, key: i, number: i + 1 };
       }),
     );
@@ -105,15 +163,34 @@ const UploadData = ({ data, setData }: Props) => {
         <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
       </Upload>
 
-      {history.map((el, i) => {
-        return (
-          <Flex gap={10} vertical key={i}>
-            {el.map((subEl, i) => {
-              return <Card key={i}>{subEl}</Card>;
-            })}
-          </Flex>
-        );
-      })}
+      <Flex gap={10} vertical>
+        {history.map((el, i) => {
+          return (
+            <Collapse
+              items={[
+                {
+                  key: i,
+                  label: `Загрузка данный № ${i + 1}`,
+                  children:
+                    el.length === 0 ? (
+                      "Не удалось найти новые данные"
+                    ) : (
+                      <Flex gap={10} vertical key={i}>
+                        {el.map((subEl, i) => {
+                          return (
+                            <Card hoverable key={i}>
+                              {subEl}
+                            </Card>
+                          );
+                        })}
+                      </Flex>
+                    ),
+                },
+              ]}
+            />
+          );
+        })}
+      </Flex>
     </>
   );
 };
