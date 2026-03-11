@@ -58,8 +58,51 @@ const UploadData = ({ data, setData }: Props) => {
 
     const log: string[] = [];
 
+    const filteredFileData = fileData.reduce<any[]>((acc, el) => {
+      if (el.designation === undefined) {
+        log.push(`
+          НД не добавлен из-за отсутствия номера 
+          "Наименование НД": ${el.name} 
+          "Орган/оганизация утвердивший НД": ${el.approvingOrganization}
+          "Дата утверждения": ${el.approvingDate}
+          "Дата начала действия": ${el.startDate}
+          "Дата окончания действия": ${el.endDate}
+          "Состояние НД": ${el.state}
+          "Статус НД": ${el.status}
+          "Сведения об изменениях": ${el.informationAboutChanges}
+          "Примечание": ${el.note}
+          "Структурное подразделение, отвественное за исполнение требований НД": ${el.responsible}
+        `);
+        return acc;
+      }
+
+      const item = acc.find((subEl) => {
+        return subEl.designation === el.designation;
+      });
+
+      if (item !== undefined) {
+        log.push(`
+          НД ${el.designation} уже был в загружаемом списке
+          "Наименование НД": ${el.name} 
+          "Орган/оганизация утвердивший НД": ${el.approvingOrganization}
+          "Дата утверждения": ${el.approvingDate}
+          "Дата начала действия": ${el.startDate}
+          "Дата окончания действия": ${el.endDate}
+          "Состояние НД": ${el.state}
+          "Статус НД": ${el.status}
+          "Сведения об изменениях": ${el.informationAboutChanges}
+          "Примечание": ${el.note}
+          "Структурное подразделение, отвественное за исполнение требований НД": ${el.responsible}
+        `);
+
+        return acc;
+      }
+
+      return [...acc, el];
+    }, []);
+
     const changeData = data.reduce<any[]>((acc, el) => {
-      const item = fileData.find((subEl) => {
+      const item = filteredFileData.find((subEl) => {
         return subEl.designation === el.designation;
       });
 
@@ -117,18 +160,18 @@ const UploadData = ({ data, setData }: Props) => {
 
       if (el.designation !== item.designation) {
         logStrings.push(
-          `"Структурное подразделение, отвественное за исполнение требований НД": ${el.designation} => ${item.designation}`,
+          `"Структурное подразделение, отвественное за исполнение требований НД": ${el.responsible} => ${item.responsible}`,
         );
       }
 
       if (logStrings.length !== 0) {
-        log.push([`Изменен НД ${el.number}`, ...logStrings].join(" | "));
+        log.push([`Изменен НД ${el.designation}`, ...logStrings].join(" | "));
       }
 
       return [...acc, item];
     }, []);
 
-    const newFileData = fileData.reduce<any[]>((acc, el) => {
+    const newFileData = filteredFileData.reduce<any[]>((acc, el) => {
       const item = data.find((subEl) => {
         return subEl.designation === el.designation;
       });
