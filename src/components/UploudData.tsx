@@ -1,4 +1,4 @@
-import { Button, Card, Collapse, Flex, Upload } from "antd";
+import { Button, Card, Collapse, Flex, Switch, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx";
 import { useState } from "react";
@@ -29,6 +29,7 @@ type Props = {
 
 const UploadData = ({ data, setData }: Props) => {
   const [history, setHistory] = useState<string[][]>([]);
+  const [isAddNew, setIsAddNew] = useState(false);
 
   const parseExcelFile = async (file: File) => {
     const excelData = await file.arrayBuffer();
@@ -176,6 +177,11 @@ const UploadData = ({ data, setData }: Props) => {
         return subEl.designation === el.designation;
       });
 
+      if (!isAddNew && item === undefined) {
+        log.push(`Добавление новых НД отключено ${el.designation}`);
+        return [];
+      }
+
       if (item === undefined) {
         log.push(`Добавлен НД ${el.designation}`);
 
@@ -196,15 +202,25 @@ const UploadData = ({ data, setData }: Props) => {
 
   return (
     <>
-      <Upload
-        beforeUpload={(file) => {
-          parseExcelFile(file);
+      <Flex gap={20}>
+        <Upload
+          beforeUpload={(file) => {
+            parseExcelFile(file);
 
-          return false;
-        }}
-      >
-        <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
-      </Upload>
+            return false;
+          }}
+        >
+          <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
+        </Upload>
+        <div>
+          Добавлять новые НД
+          <Switch
+            onChange={(checked) => {
+              setIsAddNew(checked);
+            }}
+          />
+        </div>
+      </Flex>
 
       <Flex gap={10} vertical>
         {history.map((el, i) => {
