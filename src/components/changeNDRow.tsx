@@ -8,10 +8,11 @@ import TextArea from "antd/es/input/TextArea";
 type Props = {
   item: Item;
   index: number;
+  departments: string[];
   changeData(index: number, item: Item): void;
 };
 
-const changeNDRow = ({ item, index, changeData }: Props) => {
+const changeNDRow = ({ item, index, departments, changeData }: Props) => {
   const [startDate, setStartDate] = useState(item.startDate);
   const [designation, setDesignation] = useState(item.designation);
   const [name, setName] = useState(item.name);
@@ -116,11 +117,18 @@ const changeNDRow = ({ item, index, changeData }: Props) => {
       />
     ),
     responsible: (
-      <TextArea
-        defaultValue={responsible}
-        onChange={(date) => {
-          setResponsible(date.target.value);
+      <Select
+        mode="multiple"
+        size="small"
+        placeholder=""
+        defaultValue={responsible !== undefined ? responsible.split(",") : []}
+        onChange={(data) => {
+          setResponsible(data.join(","));
         }}
+        style={{ width: "100%" }}
+        options={departments.map((el) => {
+          return { value: el };
+        })}
       />
     ),
     actions: (

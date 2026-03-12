@@ -105,10 +105,11 @@ dayjs.locale("ru");
 
 type Props = {
   data: Data;
+  departments: string[];
   setData(data: Data): void;
 };
 
-const NDTable = ({ data, setData }: Props) => {
+const NDTable = ({ data, departments, setData }: Props) => {
   const changeData = (index: number, item: Item) => {
     setData(
       data.map((el, i) => {
@@ -140,7 +141,7 @@ const NDTable = ({ data, setData }: Props) => {
         }}
         dataSource={data.map((el, i) => {
           if (el.isEdible) {
-            return changeNDRow({ item: el, index: i, changeData });
+            return changeNDRow({ item: el, index: i, departments, changeData });
           }
 
           return {
