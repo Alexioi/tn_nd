@@ -10,7 +10,7 @@ const App = () => {
   const [data, setData] = useState<Data>([]);
   const [departments, setDepartaments] = useState<string[]>([]);
 
-  function exportData() {
+  const exportData = () => {
     const worksheet = utils.aoa_to_sheet(
       data.map((el) => {
         return [
@@ -34,7 +34,7 @@ const App = () => {
     utils.book_append_sheet(workbook, worksheet, "НД");
 
     writeFile(workbook, "НД.ods");
-  }
+  };
 
   return (
     <ConfigProvider
@@ -63,6 +63,53 @@ const App = () => {
                 <UploadDB setData={setData} />
 
                 <Button onClick={exportData}>Скачать базу данных</Button>
+
+                <Flex gap={10}>
+                  {departments.map((el, i) => {
+                    return (
+                      <Button
+                        key={i}
+                        onClick={() => {
+                          const worksheet = utils.aoa_to_sheet(
+                            data
+                              .filter((subEl) => {
+                                if (subEl.responsible === undefined) {
+                                  return false;
+                                }
+
+                                return subEl.responsible
+                                  .split(",")
+                                  .includes(el);
+                              })
+                              .map((el) => {
+                                return [
+                                  el.designation,
+                                  el.name,
+                                  el.approvingOrganization,
+                                  el.approvingDate,
+                                  el.startDate,
+                                  el.endDate,
+                                  el.state,
+                                  el.status,
+                                  el.informationAboutChanges,
+                                  el.note,
+                                  el.responsible,
+                                ];
+                              }),
+                          );
+
+                          const workbook = utils.book_new();
+
+                          utils.book_append_sheet(workbook, worksheet, "НД");
+
+                          writeFile(workbook, "НД.ods");
+                        }}
+                      >
+                        {el}
+                      </Button>
+                    );
+                  })}
+                </Flex>
               </Flex>
             ),
           },
@@ -106,7 +153,6 @@ const App = () => {
                     })}
                     <Button
                       onClick={() => {
-                        console.log(departments);
                         setDepartaments([...departments, ""]);
                       }}
                     >
