@@ -1,6 +1,7 @@
 import { Button, Card, ConfigProvider, Flex, Input, Tabs } from "antd";
 import { utils, writeFile } from "xlsx";
 import { useState } from "react";
+import dayjs from "dayjs";
 import ruRU from "antd/locale/ru_RU";
 
 import "./style.css";
@@ -33,7 +34,13 @@ const App = () => {
 
     utils.book_append_sheet(workbook, worksheet, "НД");
 
-    writeFile(workbook, "НД.ods");
+    const settings = utils.aoa_to_sheet([departments]);
+
+    utils.book_append_sheet(workbook, settings, "Настройки");
+
+    const now = dayjs();
+
+    writeFile(workbook, `${now.format("YYYY-MM-DD_HH-mm")}_НД.ods`);
   };
 
   return (
@@ -60,9 +67,15 @@ const App = () => {
                   departments={departments}
                 />
 
-                <UploadDB setData={setData} />
-
-                <Button onClick={exportData}>Скачать базу данных</Button>
+                <Card>
+                  <Flex gap={30} justify="center">
+                    <UploadDB
+                      setData={setData}
+                      setDepartaments={setDepartaments}
+                    />
+                    <Button onClick={exportData}>Скачать базу данных</Button>
+                  </Flex>
+                </Card>
 
                 <Flex gap={10}>
                   {departments.map((el, i) => {

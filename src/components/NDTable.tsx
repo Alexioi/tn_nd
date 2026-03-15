@@ -211,6 +211,7 @@ const NDTable = ({ data, departments, setData }: Props) => {
         }}
       />
       <Button
+        type="primary"
         onClick={() => {
           setData([
             ...data,

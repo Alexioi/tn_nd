@@ -22,22 +22,25 @@ type Item = {
 type Data = Item[];
 
 type Props = {
+  setDepartaments(departments: string[]): void;
   setData(data: Data): void;
 };
 
-const UploadDB = ({ setData }: Props) => {
+const UploadDB = ({ setData, setDepartaments }: Props) => {
   const parseExcelFile = async (file: File) => {
     const data = await file.arrayBuffer();
 
     const workbook = read(data);
 
     const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
+    const firstWorksheet = workbook.Sheets[firstSheetName];
 
-    const x: any[] = utils.sheet_to_json(worksheet, { header: 1 });
+    const firstWorksheetData: any[] = utils.sheet_to_json(firstWorksheet, {
+      header: 1,
+    });
 
     setData(
-      x.map((el, i) => {
+      firstWorksheetData.map((el, i) => {
         return {
           key: i,
           number: i + 1,
@@ -55,6 +58,15 @@ const UploadDB = ({ setData }: Props) => {
         };
       }),
     );
+
+    const secondSheetName = workbook.SheetNames[1];
+    const secondWorksheet = workbook.Sheets[secondSheetName];
+
+    const secondWorksheetData: any[] = utils.sheet_to_json(secondWorksheet, {
+      header: 1,
+    });
+
+    setDepartaments(secondWorksheetData[0]);
   };
 
   return (
