@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 
 import type { Data, Item } from "./UploudData";
 import { changeNDRow } from "./changeNDRow";
+import { useMemo } from "react";
 
 dayjs.locale("ru");
 
@@ -14,6 +15,13 @@ type Props = {
 };
 
 const NDTable = ({ data, departments, setData }: Props) => {
+  const filters = useMemo(() => {
+    return data.map((el) => ({
+      value: el.designation,
+      text: el.designation,
+    }));
+  }, [data]);
+
   const columns = [
     {
       title: "№",
@@ -31,11 +39,12 @@ const NDTable = ({ data, departments, setData }: Props) => {
       width: 250,
       align: "center",
       filterSearch: true,
-      filters: data.map((el) => {
-        return { value: el.designation, text: el.designation };
-      }),
-
+      filters,
       onFilter: (value: any, record: any) => {
+        if (typeof record.designation !== "string") {
+          return false;
+        }
+
         return record.designation.includes(value as string);
       },
     },
