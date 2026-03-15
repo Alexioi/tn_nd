@@ -1,5 +1,7 @@
-import { Button, Empty, Table } from "antd";
+import { Button, Empty, Flex, Table } from "antd";
+import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
+
 import type { Data, Item } from "./UploudData";
 import { changeNDRow } from "./changeNDRow";
 
@@ -107,7 +109,7 @@ const columns = [
     dataIndex: "actions",
     key: "actions",
     fixed: "end",
-    width: 110,
+    width: 120,
     align: "center",
   },
 ];
@@ -158,21 +160,43 @@ const NDTable = ({ data, departments, setData }: Props) => {
           return {
             ...el,
             actions: (
-              <Button
-                onClick={() => {
-                  setData(
-                    data.map((el, index) => {
-                      if (i === index) {
-                        return { ...el, isEdible: true };
-                      }
+              <Flex gap={10}>
+                <Button
+                  onClick={() => {
+                    setData(
+                      data.map((el, index) => {
+                        if (i === index) {
+                          return { ...el, isEdible: true };
+                        }
 
-                      return { ...el, isEdible: undefined };
-                    }),
-                  );
-                }}
-              >
-                Изменить
-              </Button>
+                        return { ...el, isEdible: undefined };
+                      }),
+                    );
+                  }}
+                  disabled={data.find((el) => el.isEdible) !== undefined}
+                  type="primary"
+                >
+                  <EditFilled />
+                </Button>
+                <Button
+                  type="primary"
+                  danger
+                  disabled={data.find((el) => el.isEdible) !== undefined}
+                  onClick={() => {
+                    setData(
+                      data
+                        .filter((_, index) => {
+                          return i !== index;
+                        })
+                        .map((el, index) => {
+                          return { ...el, number: index + 1 };
+                        }),
+                    );
+                  }}
+                >
+                  <DeleteFilled />
+                </Button>
+              </Flex>
             ),
           };
         })}

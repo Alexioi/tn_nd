@@ -1,5 +1,6 @@
 import { Button, DatePicker, Input, Select } from "antd";
-import { useLayoutEffect, useState } from "react";
+import { SaveFilled } from "@ant-design/icons";
+import { useState } from "react";
 import dayjs from "dayjs";
 
 import { type Item } from "./UploudData";
@@ -29,25 +30,11 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
   const [note, setNote] = useState(item.note);
   const [responsible, setResponsible] = useState(item.responsible);
 
-  useLayoutEffect(() => {
-    setStartDate(item.startDate);
-    setDesignation(item.designation);
-    setName(item.name);
-    setApprovingOrganization(item.approvingOrganization);
-    setApprovingDate(item.approvingDate);
-    setEndDate(item.endDate);
-    setState(item.state);
-    setStatus(item.status);
-    setInformationAboutChanges(item.informationAboutChanges);
-    setNote(item.note);
-    setResponsible(item.responsible);
-  }, [item.designation]);
-
   return {
     ...item,
     designation: (
       <TextArea
-        value={designation}
+        defaultValue={designation}
         onChange={(date) => {
           setDesignation(date.target.value);
         }}
@@ -55,7 +42,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     name: (
       <TextArea
-        value={name}
+        defaultValue={name}
         onChange={(date) => {
           setName(date.target.value);
         }}
@@ -63,7 +50,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     approvingOrganization: (
       <Input
-        value={approvingOrganization}
+        defaultValue={approvingOrganization}
         onChange={(date) => {
           setApprovingOrganization(date.target.value);
         }}
@@ -71,7 +58,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     startDate: (
       <DatePicker
-        value={dayjs(item.startDate, "DD/MM/YYYY")}
+        defaultValue={dayjs(item.startDate, "DD/MM/YYYY")}
         onChange={(date) => {
           setStartDate(`${date?.format("DD/MM/YYYY")}`);
         }}
@@ -79,15 +66,16 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     approvingDate: (
       <DatePicker
-        value={dayjs(item.approvingDate, "DD/MM/YYYY")}
+        defaultValue={dayjs(item.approvingDate, "DD/MM/YYYY")}
         onChange={(date) => {
+          console.log(`${date?.format("DD/MM/YYYY")}`);
           setApprovingDate(`${date?.format("DD/MM/YYYY")}`);
         }}
       />
     ),
     endDate: (
       <TextArea
-        value={endDate}
+        defaultValue={endDate}
         onChange={(date) => {
           setEndDate(date.target.value);
         }}
@@ -95,7 +83,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     state: (
       <TextArea
-        value={state}
+        defaultValue={state}
         onChange={(date) => {
           setState(date.target.value);
         }}
@@ -104,7 +92,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     status: (
       <Select
         style={{ width: "100%" }}
-        value={status}
+        defaultValue={status}
         options={[
           { value: "1", label: "обязательный" },
           { value: "2", label: "не обязательный" },
@@ -116,7 +104,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     informationAboutChanges: (
       <TextArea
-        value={informationAboutChanges}
+        defaultValue={informationAboutChanges}
         onChange={(date) => {
           setInformationAboutChanges(date.target.value);
         }}
@@ -124,7 +112,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     note: (
       <TextArea
-        value={note}
+        defaultValue={note}
         onChange={(date) => {
           setNote(date.target.value);
         }}
@@ -165,7 +153,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
           });
         }}
       >
-        Сохранить
+        <SaveFilled />
       </Button>
     ),
   };
