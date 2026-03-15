@@ -1,5 +1,5 @@
 import { Button, DatePicker, Input, Select } from "antd";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { type Item } from "./UploudData";
@@ -29,11 +29,25 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
   const [note, setNote] = useState(item.note);
   const [responsible, setResponsible] = useState(item.responsible);
 
+  useLayoutEffect(() => {
+    setStartDate(item.startDate);
+    setDesignation(item.designation);
+    setName(item.name);
+    setApprovingOrganization(item.approvingOrganization);
+    setApprovingDate(item.approvingDate);
+    setEndDate(item.endDate);
+    setState(item.state);
+    setStatus(item.status);
+    setInformationAboutChanges(item.informationAboutChanges);
+    setNote(item.note);
+    setResponsible(item.responsible);
+  }, [item.designation]);
+
   return {
     ...item,
     designation: (
       <TextArea
-        defaultValue={designation}
+        value={designation}
         onChange={(date) => {
           setDesignation(date.target.value);
         }}
@@ -41,7 +55,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     name: (
       <TextArea
-        defaultValue={name}
+        value={name}
         onChange={(date) => {
           setName(date.target.value);
         }}
@@ -49,7 +63,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     approvingOrganization: (
       <Input
-        defaultValue={approvingOrganization}
+        value={approvingOrganization}
         onChange={(date) => {
           setApprovingOrganization(date.target.value);
         }}
@@ -57,7 +71,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     startDate: (
       <DatePicker
-        defaultValue={dayjs(item.startDate, "DD/MM/YYYY")}
+        value={dayjs(item.startDate, "DD/MM/YYYY")}
         onChange={(date) => {
           setStartDate(`${date?.format("DD/MM/YYYY")}`);
         }}
@@ -65,7 +79,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     approvingDate: (
       <DatePicker
-        defaultValue={dayjs(item.approvingDate, "DD/MM/YYYY")}
+        value={dayjs(item.approvingDate, "DD/MM/YYYY")}
         onChange={(date) => {
           setApprovingDate(`${date?.format("DD/MM/YYYY")}`);
         }}
@@ -73,7 +87,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     endDate: (
       <TextArea
-        defaultValue={endDate}
+        value={endDate}
         onChange={(date) => {
           setEndDate(date.target.value);
         }}
@@ -81,7 +95,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     state: (
       <TextArea
-        defaultValue={state}
+        value={state}
         onChange={(date) => {
           setState(date.target.value);
         }}
@@ -102,7 +116,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     informationAboutChanges: (
       <TextArea
-        defaultValue={informationAboutChanges}
+        value={informationAboutChanges}
         onChange={(date) => {
           setInformationAboutChanges(date.target.value);
         }}
@@ -110,7 +124,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     note: (
       <TextArea
-        defaultValue={note}
+        value={note}
         onChange={(date) => {
           setNote(date.target.value);
         }}
