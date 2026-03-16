@@ -14,13 +14,19 @@ type Props = {
 };
 
 const changeNDRow = ({ item, index, departments, changeData }: Props) => {
-  const [startDate, setStartDate] = useState(item.startDate);
+  const now = dayjs();
+
+  const [startDate, setStartDate] = useState(
+    item.startDate === "" ? now.format("DD/MM/YYYY") : item.startDate,
+  );
   const [designation, setDesignation] = useState(item.designation);
   const [name, setName] = useState(item.name);
   const [approvingOrganization, setApprovingOrganization] = useState(
     item.approvingOrganization,
   );
-  const [approvingDate, setApprovingDate] = useState(item.approvingDate);
+  const [approvingDate, setApprovingDate] = useState(
+    item.approvingDate === "" ? now.format("DD/MM/YYYY") : item.approvingDate,
+  );
   const [endDate, setEndDate] = useState(item.endDate);
   const [state, setState] = useState(item.state);
   const [status, setStatus] = useState(item.status);
@@ -29,6 +35,8 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
   );
   const [note, setNote] = useState(item.note);
   const [responsible, setResponsible] = useState(item.responsible);
+
+  console.log(startDate);
 
   return {
     ...item,
@@ -58,7 +66,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     startDate: (
       <DatePicker
-        defaultValue={dayjs(item.startDate, "DD/MM/YYYY")}
+        defaultValue={dayjs(startDate, "DD/MM/YYYY")}
         onChange={(date) => {
           setStartDate(`${date?.format("DD/MM/YYYY")}`);
         }}
@@ -66,7 +74,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
     ),
     approvingDate: (
       <DatePicker
-        defaultValue={dayjs(item.approvingDate, "DD/MM/YYYY")}
+        defaultValue={dayjs(approvingDate, "DD/MM/YYYY")}
         onChange={(date) => {
           console.log(`${date?.format("DD/MM/YYYY")}`);
           setApprovingDate(`${date?.format("DD/MM/YYYY")}`);
