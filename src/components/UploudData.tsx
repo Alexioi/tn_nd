@@ -46,8 +46,16 @@ const UploadData = ({ data, setData }: Props) => {
           designation: el[0],
           name: el[1],
           approvingOrganization: el[2],
-          approvingDate: el[3],
-          startDate: el[4],
+          approvingDate: el[3]
+            ? new Date((el[3] - 25569) * 86400 * 1000).toLocaleDateString(
+                "ru-RU",
+              )
+            : "",
+          startDate: el[4]
+            ? new Date((el[4] - 25569) * 86400 * 1000).toLocaleDateString(
+                "ru-RU",
+              )
+            : "",
           endDate: el[5],
           state: el[6],
           status: el[7],
