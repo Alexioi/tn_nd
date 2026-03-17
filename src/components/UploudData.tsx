@@ -1,6 +1,6 @@
 import { Button, Card, Collapse, Flex, Switch, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { read, utils } from "xlsx";
+import { read, utils } from "xlsx-js-style";
 import { useState } from "react";
 
 type Item = {

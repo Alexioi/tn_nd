@@ -1,6 +1,6 @@
 import { Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { read, utils } from "xlsx";
+import { read, utils } from "xlsx-js-style";
 
 type Item = {
   key: number;

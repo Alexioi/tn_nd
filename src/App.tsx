@@ -1,5 +1,5 @@
 import { Button, Card, ConfigProvider, Flex, Input, Tabs } from "antd";
-import { utils, writeFile } from "xlsx";
+import { utils, writeFile } from "xlsx-js-style";
 import { useState } from "react";
 import dayjs from "dayjs";
 import ruRU from "antd/locale/ru_RU";
@@ -84,39 +84,167 @@ const App = () => {
                       <Button
                         key={i}
                         onClick={() => {
-                          const worksheet = utils.aoa_to_sheet(
-                            data
-                              .filter((subEl) => {
-                                if (subEl.responsible === undefined) {
+                          const dataStyle = {
+                            border: {
+                              top: { style: "thin", color: { rgb: "000000" } },
+                              bottom: {
+                                style: "thin",
+                                color: { rgb: "000000" },
+                              },
+                              left: { style: "thin", color: { rgb: "000000" } },
+                              right: {
+                                style: "thin",
+                                color: { rgb: "000000" },
+                              },
+                            },
+                          };
+
+                          const headerStyle = {
+                            fill: { fgColor: { rgb: "E0E0E0" } },
+                            border: {
+                              top: { style: "thin", color: { rgb: "000000" } },
+                              bottom: {
+                                style: "thin",
+                                color: { rgb: "000000" },
+                              },
+                              left: { style: "thin", color: { rgb: "000000" } },
+                              right: {
+                                style: "thin",
+                                color: { rgb: "000000" },
+                              },
+                            },
+                          };
+
+                          const getDataArray = (data: Data) =>
+                            data.map((el) => {
+                              return [
+                                {
+                                  v: el.designation || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.name || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.approvingOrganization || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.approvingDate || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.startDate || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.endDate || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.state || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.status || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.informationAboutChanges || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                                {
+                                  v: el.note || "",
+                                  t: "s",
+                                  s: dataStyle,
+                                },
+                              ];
+                            });
+
+                          const filteredData = data.filter((subEl) => {
+                            if (subEl.responsible === undefined) {
+                              return false;
+                            }
+
+                            if (subEl.state === "Отмененный") {
+                              return false;
+                            }
+
+                            return subEl.responsible.split(", ").includes(el);
+                          });
+
+                          const filteredPAOData = [
+                            [
+                              {
+                                v: "1. ПАО",
+                                t: "s",
+                                s: headerStyle,
+                              },
+                            ],
+                            ...getDataArray(
+                              filteredData.filter((el) => {
+                                if (
+                                  typeof el.approvingOrganization !== "string"
+                                ) {
+                                  return false;
+                                }
+                                console.log(el.approvingOrganization);
+
+                                return el.approvingOrganization.includes("ПАО");
+                              }),
+                            ),
+                          ];
+
+                          const filteredOSTData = [
+                            [
+                              {
+                                v: "2. ОСТ",
+                                t: "s",
+                                s: headerStyle,
+                              },
+                            ],
+                            ...getDataArray(
+                              filteredData.filter((el) => {
+                                if (
+                                  typeof el.approvingOrganization !== "string"
+                                ) {
                                   return false;
                                 }
 
-                                return subEl.responsible
-                                  .split(", ")
-                                  .includes(el);
-                              })
-                              .map((el) => {
-                                return [
-                                  el.designation,
-                                  el.name,
-                                  el.approvingOrganization,
-                                  el.approvingDate,
-                                  el.startDate,
-                                  el.endDate,
-                                  el.state,
-                                  el.status,
-                                  el.informationAboutChanges,
-                                  el.note,
-                                  el.responsible,
-                                ];
+                                return el.approvingOrganization.includes(
+                                  "Приморск",
+                                );
                               }),
-                          );
+                            ),
+                          ];
+
+                          const worksheet = utils.aoa_to_sheet([
+                            ...filteredPAOData,
+                            ...filteredOSTData,
+                          ]);
+
+                          worksheet["!merges"] = [
+                            utils.decode_range("A1:J1"),
+                            utils.decode_range(
+                              `A${filteredPAOData.length + 1}:J${filteredPAOData.length + 1}`,
+                            ),
+                          ];
 
                           const workbook = utils.book_new();
 
                           utils.book_append_sheet(workbook, worksheet, "НД");
 
-                          writeFile(workbook, "НД.ods");
+                          writeFile(workbook, "НД.xlsx");
                         }}
                       >
                         {el}
