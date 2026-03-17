@@ -90,6 +90,13 @@ const NDTable = ({ data, departments, setData }: Props) => {
     },
     ,
     {
+      title: "Дата, номер приказа",
+      dataIndex: "dateAndNumber",
+      key: "dateAndNumber",
+      width: 150,
+      align: "center",
+    },
+    {
       title: "Состояние НД",
       dataIndex: "state",
       key: "state",
@@ -156,8 +163,8 @@ const NDTable = ({ data, departments, setData }: Props) => {
         virtual
         pagination={false}
         rowClassName={(record) => {
-          if (typeof record.note === "string") {
-            return record.note.toLocaleLowerCase().includes("отменено")
+          if (typeof record.state === "string") {
+            return record.state.toLocaleLowerCase().includes("отмененный")
               ? "row-color-warning"
               : "";
           }
@@ -236,6 +243,7 @@ const NDTable = ({ data, departments, setData }: Props) => {
               approvingDate: "",
               startDate: "",
               endDate: "",
+              dateAndNumber: "",
               state: "",
               status: "",
               informationAboutChanges: "",

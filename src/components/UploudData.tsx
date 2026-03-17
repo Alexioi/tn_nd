@@ -12,6 +12,7 @@ type Item = {
   approvingDate: string;
   startDate: string;
   endDate: string;
+  dateAndNumber: string;
   state: string;
   status: string;
   informationAboutChanges: string;
@@ -57,11 +58,12 @@ const UploadData = ({ data, setData }: Props) => {
               )
             : "",
           endDate: el[5],
-          state: el[6],
-          status: el[7],
-          informationAboutChanges: el[8],
-          note: el[9],
-          responsible: el[10],
+          dateAndNumber: el[6],
+          state: el[7],
+          status: el[8],
+          informationAboutChanges: el[9],
+          note: el[10],
+          responsible: el[11],
         };
       });
 

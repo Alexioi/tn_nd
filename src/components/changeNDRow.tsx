@@ -39,6 +39,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
   );
   const [note, setNote] = useState(item.note);
   const [responsible, setResponsible] = useState(item.responsible);
+  const [dateAndNumber, setDateAndNumber] = useState(item.dateAndNumber);
 
   return {
     ...item,
@@ -91,11 +92,21 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
         }}
       />
     ),
-    state: (
+    dateAndNumber: (
       <TextArea
-        defaultValue={state}
+        defaultValue={item.dateAndNumber}
         onChange={(date) => {
-          setState(date.target.value);
+          setDateAndNumber(date.target.value);
+        }}
+      />
+    ),
+    state: (
+      <Select
+        style={{ width: "100%" }}
+        defaultValue={state}
+        options={[{ value: "Отмененный", label: "Отмененный" }]}
+        onSelect={(_, { label }) => {
+          setState(label);
         }}
       />
     ),
@@ -133,9 +144,9 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
         mode="multiple"
         size="small"
         placeholder=""
-        defaultValue={responsible !== undefined ? responsible.split(",") : []}
+        defaultValue={responsible !== undefined ? responsible.split(", ") : []}
         onChange={(data) => {
-          setResponsible(data.join(","));
+          setResponsible(data.join(", "));
         }}
         style={{ width: "100%" }}
         options={departments.map((el) => {
@@ -155,6 +166,7 @@ const changeNDRow = ({ item, index, departments, changeData }: Props) => {
             approvingOrganization,
             approvingDate,
             endDate,
+            dateAndNumber,
             state,
             status,
             informationAboutChanges,

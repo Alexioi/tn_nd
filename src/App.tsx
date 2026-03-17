@@ -21,6 +21,7 @@ const App = () => {
           el.approvingDate,
           el.startDate,
           el.endDate,
+          el.dateAndNumber,
           el.state,
           el.status,
           el.informationAboutChanges,
@@ -91,7 +92,7 @@ const App = () => {
                                 }
 
                                 return subEl.responsible
-                                  .split(",")
+                                  .split(", ")
                                   .includes(el);
                               })
                               .map((el) => {
