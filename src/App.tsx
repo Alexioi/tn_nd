@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  ConfigProvider,
-  Flex,
-  Input,
-  Tabs,
-  Typography,
-} from "antd";
+import { Button, Card, ConfigProvider, Flex, Tabs, Typography } from "antd";
 import { utils, writeFile } from "xlsx-js-style";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -16,6 +8,7 @@ import "./style.css";
 import {
   DownloadReport,
   NDTable,
+  Settings,
   UploadData,
   UploadDB,
   type Data,
@@ -129,41 +122,10 @@ const App = () => {
             key: "3",
             label: "Настройки",
             children: (
-              <>
-                <Card>
-                  Добавление отдела
-                  <Flex vertical gap={10}>
-                    {departments.map((el, i) => {
-                      return (
-                        <Input
-                          key={i}
-                          onChange={(value) => {
-                            const newDepartaments = departments.map(
-                              (subEl, index) => {
-                                if (i === index) {
-                                  return value.target.value;
-                                }
-
-                                return subEl;
-                              },
-                            );
-
-                            setDepartaments(newDepartaments);
-                          }}
-                          value={el}
-                        />
-                      );
-                    })}
-                    <Button
-                      onClick={() => {
-                        setDepartaments([...departments, ""]);
-                      }}
-                    >
-                      добавить
-                    </Button>
-                  </Flex>
-                </Card>
-              </>
+              <Settings
+                departments={departments}
+                setDepartaments={setDepartaments}
+              />
             ),
           },
         ]}
