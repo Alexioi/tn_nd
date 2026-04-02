@@ -1,4 +1,12 @@
-import { Button, Card, ConfigProvider, Flex, Input, Tabs } from "antd";
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Flex,
+  Input,
+  Tabs,
+  Typography,
+} from "antd";
 import { utils, writeFile } from "xlsx-js-style";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -67,7 +75,12 @@ const App = () => {
             key: "1",
             label: "Список НД",
             children: (
-              <Flex style={{ justifyContent: "center" }} gap={20} vertical>
+              <Flex
+                style={{ justifyContent: "center" }}
+                gap={20}
+                vertical
+                align="center"
+              >
                 <NDTable
                   data={data}
                   setData={setData}
@@ -84,13 +97,22 @@ const App = () => {
                   </Flex>
                 </Card>
 
-                <Flex gap={10}>
-                  {departments.map((el, i) => {
-                    return (
-                      <DownloadReport key={i} departament={el} data={data} />
-                    );
-                  })}
-                </Flex>
+                <Card style={{ width: "100%", maxWidth: "800px" }}>
+                  <Flex justify="center">
+                    <Typography.Title level={3}>
+                      Выгрузить НД по отделам
+                    </Typography.Title>
+                  </Flex>
+
+                  <Flex gap={10} wrap justify="center">
+                    <DownloadReport data={data} />
+                    {departments.map((el, i) => {
+                      return (
+                        <DownloadReport key={i} departament={el} data={data} />
+                      );
+                    })}
+                  </Flex>
+                </Card>
               </Flex>
             ),
           },

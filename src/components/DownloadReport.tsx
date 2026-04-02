@@ -4,8 +4,8 @@ import { utils, writeFile } from "xlsx-js-style";
 import type { Data } from "./UploudData";
 
 type Props = {
-  departament: string;
   data: Data;
+  departament?: string;
 };
 
 const DownloadReport = ({ departament, data }: Props) => {
@@ -87,6 +87,10 @@ const DownloadReport = ({ departament, data }: Props) => {
         return false;
       }
 
+      if (departament === undefined) {
+        return true;
+      }
+
       return el.responsible.split(", ").includes(departament);
     });
 
@@ -148,7 +152,14 @@ const DownloadReport = ({ departament, data }: Props) => {
     writeFile(workbook, "НД.xlsx");
   };
 
-  return <Button onClick={handleButtonClick}>{departament}</Button>;
+  return (
+    <Button
+      onClick={handleButtonClick}
+      type={departament === undefined ? "primary" : "default"}
+    >
+      {departament === undefined ? "Все отделы" : departament}
+    </Button>
+  );
 };
 
 export { DownloadReport };
