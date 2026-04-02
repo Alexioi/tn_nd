@@ -122,10 +122,12 @@ const App = () => {
             key: "3",
             label: "Настройки",
             children: (
-              <Settings
-                departments={departments}
-                setDepartaments={setDepartaments}
-              />
+              <Flex justify="center">
+                <Settings
+                  departments={departments}
+                  setDepartaments={setDepartaments}
+                />
+              </Flex>
             ),
           },
         ]}
