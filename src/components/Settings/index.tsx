@@ -1,11 +1,10 @@
 import { Button, Collapse, Flex, Input } from "antd";
 
-type Props = {
-  departments: string[];
-  setDepartaments(departments: string[]): void;
-};
+import { useSettings } from "../../store";
 
-const Settings = ({ departments, setDepartaments }: Props) => {
+const Settings = () => {
+  const { departments, setDepartaments } = useSettings();
+
   return (
     <Collapse
       style={{ width: "100%", maxWidth: "800px" }}

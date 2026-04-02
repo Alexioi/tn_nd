@@ -13,10 +13,11 @@ import {
   UploadDB,
   type Data,
 } from "./components";
+import { useSettings } from "./store";
 
 const App = () => {
   const [data, setData] = useState<Data>([]);
-  const [departments, setDepartaments] = useState<string[]>([]);
+  const { departments, setDepartaments } = useSettings();
 
   const exportData = () => {
     const worksheet = utils.aoa_to_sheet(
@@ -123,10 +124,7 @@ const App = () => {
             label: "Настройки",
             children: (
               <Flex justify="center">
-                <Settings
-                  departments={departments}
-                  setDepartaments={setDepartaments}
-                />
+                <Settings />
               </Flex>
             ),
           },
