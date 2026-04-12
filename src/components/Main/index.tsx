@@ -46,7 +46,7 @@ const Main = () => {
 
   return (
     <Flex style={{ justifyContent: "center" }} gap={20} vertical align="center">
-      <NDTable data={data} setData={setData} departments={departments} />
+      <NDTable />
 
       <Card>
         <Flex gap={30} justify="center">

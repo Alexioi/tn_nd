@@ -2,18 +2,15 @@ import { Button, Empty, Flex, Table } from "antd";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-import type { Data, Item } from "./UploudData";
+import { useData, useSettings } from "../../store";
 import { changeNDRow } from "./changeNDRow";
 
 dayjs.locale("ru");
 
-type Props = {
-  data: Data;
-  departments: string[];
-  setData(data: Data): void;
-};
+const NDTable = () => {
+  const { departments } = useSettings();
+  const { data, setData } = useData();
 
-const NDTable = ({ data, departments, setData }: Props) => {
   const columns = [
     {
       title: "№",
@@ -142,7 +139,7 @@ const NDTable = ({ data, departments, setData }: Props) => {
     },
   ];
 
-  const changeData = (index: number, item: Item) => {
+  const changeData = (index: number, item: any) => {
     setData(
       data.map((el, i) => {
         if (i === index) {
