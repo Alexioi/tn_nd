@@ -51,8 +51,7 @@ const Settings = () => {
                 );
               })}
               <Button
-                color="cyan"
-                variant="solid"
+                type="primary"
                 onClick={() => {
                   setDepartaments([...departments, ""]);
                 }}

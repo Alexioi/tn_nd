@@ -189,28 +189,30 @@ const UploadData = () => {
   };
 
   return (
-    <>
-      <Flex gap={20}>
-        <Upload
-          beforeUpload={(file) => {
-            parseExcelFile(file);
+    <Flex vertical gap={20} align="center">
+      <Card>
+        <Flex gap={20} align="center">
+          <Upload
+            beforeUpload={(file) => {
+              parseExcelFile(file);
 
-            return false;
-          }}
-        >
-          <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
-        </Upload>
-        <div>
-          Добавлять новые НД
-          <Switch
-            onChange={(checked) => {
-              setIsAddNew(checked);
+              return false;
             }}
-          />
-        </div>
-      </Flex>
+          >
+            <Button icon={<UploadOutlined />}>Загрузить новые данные</Button>
+          </Upload>
+          <div>
+            Добавлять новые НД{" "}
+            <Switch
+              onChange={(checked) => {
+                setIsAddNew(checked);
+              }}
+            />
+          </div>
+        </Flex>
+      </Card>
 
-      <Flex gap={10} vertical>
+      <Flex gap={10} vertical style={{ width: "100%" }}>
         {history.map((el, i) => {
           return (
             <Collapse
@@ -218,7 +220,7 @@ const UploadData = () => {
               items={[
                 {
                   key: i,
-                  label: `Загрузка данный № ${i + 1}`,
+                  label: `Загрузка данных № ${i + 1}`,
                   children:
                     el.length === 0 ? (
                       "Не удалось найти новые данные"
@@ -239,7 +241,7 @@ const UploadData = () => {
           );
         })}
       </Flex>
-    </>
+    </Flex>
   );
 };
 
