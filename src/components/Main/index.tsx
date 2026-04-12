@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Typography } from "antd";
+import { Button, Flex } from "antd";
 import dayjs from "dayjs";
 import { utils, writeFile } from "xlsx-js-style";
 import { useState } from "react";
@@ -6,8 +6,8 @@ import { useState } from "react";
 import { useSettings, useData } from "../../store";
 import { NDTable } from "./NDTable";
 import { UploadDB } from "./UploadDB";
-import { DownloadReport } from "./DownloadReport";
 import { ChangeNDList } from "./ChangeNDList";
+import { ReportCard } from "./ReportCard";
 
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,18 +93,7 @@ const Main = () => {
 
       <NDTable />
 
-      <Card style={{ width: "100%", maxWidth: "800px" }}>
-        <Flex justify="center">
-          <Typography.Title level={3}>Выгрузить НД по отделам</Typography.Title>
-        </Flex>
-
-        <Flex gap={10} wrap justify="center">
-          <DownloadReport />
-          {departments.map((el, i) => {
-            return <DownloadReport key={i} departament={el} />;
-          })}
-        </Flex>
-      </Card>
+      <ReportCard />
     </Flex>
   );
 };
