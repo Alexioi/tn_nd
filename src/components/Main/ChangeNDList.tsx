@@ -17,7 +17,7 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
   const now = dayjs();
 
   const { data, setData } = useData();
-  const { departments } = useSettings();
+  const { departments, states, statuses } = useSettings();
 
   const [startDate, setStartDate] = useState(
     item.startDate === "" || item.startDate === "Invalid Date"
@@ -157,8 +157,13 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
       <Select
         style={{ width: "100%" }}
         defaultValue={state}
-        options={[{ value: "Отмененный", label: "Отмененный" }]}
-        onSelect={(_, { label }) => {
+        options={states.map((el) => {
+          return {
+            value: el,
+            labal: el,
+          };
+        })}
+        onSelect={(label) => {
           setState(label);
         }}
       />
@@ -166,11 +171,13 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
       <Select
         style={{ width: "100%" }}
         defaultValue={status}
-        options={[
-          { value: "1", label: "обязательный" },
-          { value: "2", label: "не обязательный" },
-        ]}
-        onSelect={(_, { label }) => {
+        options={statuses.map((el) => {
+          return {
+            value: el,
+            labal: el,
+          };
+        })}
+        onSelect={(label) => {
           setStatus(label);
         }}
       />
