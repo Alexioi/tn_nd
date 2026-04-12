@@ -73,16 +73,16 @@ const DownloadReport = ({ file, departament }: Props) => {
         });
 
     const filteredData = data.filter((el) => {
-      if (el.responsible === undefined) {
-        return false;
-      }
-
       if (el.state === "Отмененный") {
         return false;
       }
 
       if (departament === undefined) {
         return true;
+      }
+
+      if (el.responsible === undefined) {
+        return false;
       }
 
       return el.responsible.split(", ").includes(departament);
@@ -111,6 +111,8 @@ const DownloadReport = ({ file, departament }: Props) => {
         return [...acc, { names: [el.name], description: el.description }];
       }, []);
 
+    console.log(mergeOrganizations);
+
     const allData = mergeOrganizations
       .map((el) => {
         return [
@@ -135,7 +137,6 @@ const DownloadReport = ({ file, departament }: Props) => {
       .reduce((acc, el) => {
         return [...acc, ...el];
       }, []);
-    console.log(allData);
 
     const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
 
