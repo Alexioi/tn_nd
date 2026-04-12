@@ -28,9 +28,9 @@ const ReportCard = () => {
         </Flex>
       ) : (
         <Flex gap={10} wrap justify="center">
-          <DownloadReport />
+          <DownloadReport file={file} />
           {departments.map((el, i) => {
-            return <DownloadReport key={i} departament={el} />;
+            return <DownloadReport key={i} departament={el} file={file} />;
           })}
         </Flex>
       )}

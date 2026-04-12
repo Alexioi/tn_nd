@@ -1,45 +1,37 @@
 import { Button } from "antd";
-import { utils, writeFile } from "xlsx-js-style";
+import { read, utils, writeFile } from "xlsx-js-style";
 
 import { useData } from "../../store";
 
 type Props = {
+  file: any;
   departament?: string;
 };
 
-const DownloadReport = ({ departament }: Props) => {
+const DownloadReport = ({ file, departament }: Props) => {
   const { data } = useData();
 
-  const handleButtonClick = () => {
-    const dataStyle = {
-      border: {
-        top: { style: "thin", color: { rgb: "000000" } },
-        bottom: {
-          style: "thin",
-          color: { rgb: "000000" },
-        },
-        left: { style: "thin", color: { rgb: "000000" } },
-        right: {
-          style: "thin",
-          color: { rgb: "000000" },
-        },
+  const handleButtonClick = async () => {
+    const border = {
+      top: { style: "thin", color: { rgb: "000000" } },
+      bottom: {
+        style: "thin",
+        color: { rgb: "000000" },
       },
+      left: { style: "thin", color: { rgb: "000000" } },
+      right: {
+        style: "thin",
+        color: { rgb: "000000" },
+      },
+    };
+
+    const dataStyle = {
+      border,
     };
 
     const headerStyle = {
       fill: { fgColor: { rgb: "E0E0E0" } },
-      border: {
-        top: { style: "thin", color: { rgb: "000000" } },
-        bottom: {
-          style: "thin",
-          color: { rgb: "000000" },
-        },
-        left: { style: "thin", color: { rgb: "000000" } },
-        right: {
-          style: "thin",
-          color: { rgb: "000000" },
-        },
-      },
+      border,
     };
 
     const getDataArray = (data: any[]) =>
@@ -133,21 +125,24 @@ const DownloadReport = ({ departament }: Props) => {
       ),
     ];
 
-    const worksheet = utils.aoa_to_sheet([
-      ...filteredPAOData,
-      ...filteredOSTData,
-    ]);
+    const workbook = read(await file.arrayBuffer(), { cellStyles: true });
+
+    const sheetName = workbook.SheetNames[1];
+
+    const worksheet = workbook.Sheets[sheetName];
+
+    const allData = [...filteredPAOData, ...filteredOSTData];
+
+    const startRow = 20;
 
     worksheet["!merges"] = [
-      utils.decode_range("A1:J1"),
+      utils.decode_range(`A${startRow}:J${startRow}`),
       utils.decode_range(
-        `A${filteredPAOData.length + 1}:J${filteredPAOData.length + 1}`,
+        `A${startRow + filteredPAOData.length}:J${startRow + filteredPAOData.length}`,
       ),
     ];
 
-    const workbook = utils.book_new();
-
-    utils.book_append_sheet(workbook, worksheet, "НД");
+    utils.sheet_add_aoa(worksheet, allData, { origin: `A${startRow}` });
 
     writeFile(workbook, "НД.xlsx");
   };
