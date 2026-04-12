@@ -135,6 +135,7 @@ const DownloadReport = ({ file, departament }: Props) => {
       .reduce((acc, el) => {
         return [...acc, ...el];
       }, []);
+    console.log(allData);
 
     const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
 
