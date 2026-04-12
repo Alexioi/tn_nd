@@ -88,7 +88,7 @@ const DownloadReport = ({ file, departament }: Props) => {
       return el.responsible.split(", ").includes(departament);
     });
 
-    const test1 = organizations
+    const mergeOrganizations = organizations
       .filter((el) => el.description !== "")
       .reduce<{ names: string[]; description: string }[]>((acc, el) => {
         const id = acc.findIndex((subEl) => {
@@ -111,45 +111,30 @@ const DownloadReport = ({ file, departament }: Props) => {
         return [...acc, { names: [el.name], description: el.description }];
       }, []);
 
-    console.log(test1);
+    const allData = mergeOrganizations
+      .map((el) => {
+        return [
+          [
+            {
+              v: el.description,
+              t: "s",
+              s: headerStyle,
+            },
+          ],
+          ...getDataArray(
+            filteredData.filter((subEl) => {
+              if (typeof subEl.approvingOrganization !== "string") {
+                return false;
+              }
 
-    const filteredPAOData = [
-      [
-        {
-          v: "1. ПАО",
-          t: "s",
-          s: headerStyle,
-        },
-      ],
-      ...getDataArray(
-        filteredData.filter((el) => {
-          if (typeof el.approvingOrganization !== "string") {
-            return false;
-          }
-
-          return el.approvingOrganization.includes("ПАО");
-        }),
-      ),
-    ];
-
-    const filteredOSTData = [
-      [
-        {
-          v: "2. ОСТ",
-          t: "s",
-          s: headerStyle,
-        },
-      ],
-      ...getDataArray(
-        filteredData.filter((el) => {
-          if (typeof el.approvingOrganization !== "string") {
-            return false;
-          }
-
-          return el.approvingOrganization.includes("Приморск");
-        }),
-      ),
-    ];
+              return el.names.includes(subEl.approvingOrganization);
+            }),
+          ),
+        ];
+      })
+      .reduce((acc, el) => {
+        return [...acc, ...el];
+      }, []);
 
     const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
 
@@ -157,13 +142,9 @@ const DownloadReport = ({ file, departament }: Props) => {
 
     const worksheet = workbook.Sheets[sheetName];
 
-    const allData = [...filteredPAOData, ...filteredOSTData];
-
     worksheet["!merges"] = [
       utils.decode_range(`A${reports.row}:J${reports.row}`),
-      utils.decode_range(
-        `A${reports.row + filteredPAOData.length}:J${reports.row + filteredPAOData.length}`,
-      ),
+      utils.decode_range(`A${reports.row + 4}:J${reports.row + 4}`),
     ];
 
     utils.sheet_add_aoa(worksheet, allData, { origin: `A${reports.row}` });
