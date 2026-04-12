@@ -1,7 +1,7 @@
 import { Button } from "antd";
-import { read, utils, writeFile } from "xlsx-js-style";
+import { readFile, utils, writeFile } from "xlsx-js-style";
 
-import { useData } from "../../store";
+import { useData, useSettings } from "../../store";
 
 type Props = {
   file: any;
@@ -10,6 +10,7 @@ type Props = {
 
 const DownloadReport = ({ file, departament }: Props) => {
   const { data } = useData();
+  const { report } = useSettings();
 
   const handleButtonClick = async () => {
     const border = {
@@ -125,24 +126,22 @@ const DownloadReport = ({ file, departament }: Props) => {
       ),
     ];
 
-    const workbook = read(await file.arrayBuffer(), { cellStyles: true });
+    const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
 
-    const sheetName = workbook.SheetNames[1];
+    const sheetName = workbook.SheetNames[report.sheet - 1];
 
     const worksheet = workbook.Sheets[sheetName];
 
     const allData = [...filteredPAOData, ...filteredOSTData];
 
-    const startRow = 20;
-
     worksheet["!merges"] = [
-      utils.decode_range(`A${startRow}:J${startRow}`),
+      utils.decode_range(`A${report.row}:J${report.row}`),
       utils.decode_range(
-        `A${startRow + filteredPAOData.length}:J${startRow + filteredPAOData.length}`,
+        `A${report.row + filteredPAOData.length}:J${report.row + filteredPAOData.length}`,
       ),
     ];
 
-    utils.sheet_add_aoa(worksheet, allData, { origin: `A${startRow}` });
+    utils.sheet_add_aoa(worksheet, allData, { origin: `A${report.row}` });
 
     writeFile(workbook, "НД.xlsx");
   };
