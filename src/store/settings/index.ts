@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 type Store = {
   departments: string[];
-  organizations: string[];
+  organizations: { name: string; description: string }[];
   states: string[];
   statuses: string[];
   reports: { sheet: number; row: number };
@@ -10,7 +10,9 @@ type Store = {
   setReports: (settings: { sheet: number; row: number }) => void;
   setStates: (states: string[]) => void;
   setStatuses: (statuses: string[]) => void;
-  setOrganizations: (departments: string[]) => void;
+  setOrganizations: (
+    departments: { name: string; description: string }[],
+  ) => void;
 };
 
 const useSettings = create<Store>()((set) => ({

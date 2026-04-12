@@ -4,6 +4,7 @@ import { Departaments } from "./Departaments";
 import { Reports } from "./Reports";
 import { States } from "./States";
 import { Statuses } from "./Statuses";
+import { Organizations } from "./Organizations";
 
 const Settings = () => {
   return (
@@ -23,7 +24,7 @@ const Settings = () => {
         {
           key: "3",
           label: "Добавить орган/оганизация утвердивший НД",
-          children: <Reports />,
+          children: <Organizations />,
         },
         {
           key: "4",
