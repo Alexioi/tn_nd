@@ -10,7 +10,7 @@ type Props = {
 
 const DownloadReport = ({ file, departament }: Props) => {
   const { data } = useData();
-  const { reports } = useSettings();
+  const { reports, organizations } = useSettings();
 
   const handleButtonClick = async () => {
     const border = {
@@ -87,6 +87,31 @@ const DownloadReport = ({ file, departament }: Props) => {
 
       return el.responsible.split(", ").includes(departament);
     });
+
+    const test1 = organizations
+      .filter((el) => el.description !== "")
+      .reduce<{ names: string[]; description: string }[]>((acc, el) => {
+        const id = acc.findIndex((subEl) => {
+          return subEl.description.includes(el.description);
+        });
+
+        if (id !== -1) {
+          return acc.map((subSubEl, i) => {
+            if (id === i) {
+              return {
+                description: subSubEl.description,
+                names: [...subSubEl.names, el.name],
+              };
+            }
+
+            return subSubEl;
+          });
+        }
+
+        return [...acc, { names: [el.name], description: el.description }];
+      }, []);
+
+    console.log(test1);
 
     const filteredPAOData = [
       [
