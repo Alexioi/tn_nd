@@ -17,7 +17,7 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
   const now = dayjs();
 
   const { data, setData } = useData();
-  const { departments, states, statuses } = useSettings();
+  const { departments, states, statuses, organizations } = useSettings();
 
   const [startDate, setStartDate] = useState(
     item.startDate === "" || item.startDate === "Invalid Date"
@@ -111,10 +111,17 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
         }}
       />
       <Typography.Text>Орган/оганизация утвердивший НД</Typography.Text>
-      <Input
+      <Select
+        style={{ width: "100%" }}
         defaultValue={approvingOrganization}
-        onChange={(date) => {
-          setApprovingOrganization(date.target.value);
+        options={organizations.map((el) => {
+          return {
+            value: el.name,
+            labal: el.name,
+          };
+        })}
+        onSelect={(label) => {
+          setStatus(label);
         }}
       />
       <Flex gap={10}>
