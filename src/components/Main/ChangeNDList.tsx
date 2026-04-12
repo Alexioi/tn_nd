@@ -8,57 +8,48 @@ import { useData, useSettings } from "../../store";
 
 type Props = {
   isOpen: boolean;
-  setIsOpen(): void;
-  item?: Item;
+  title: string;
+  item: Item;
   index?: number;
+  setIsOpen(): void;
 };
 
-const ChangeNDList = ({ isOpen, item, index, setIsOpen }: Props) => {
+const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
   const now = dayjs();
 
   const { data, setData } = useData();
   const { departments } = useSettings();
 
   const [startDate, setStartDate] = useState(
-    item === undefined ||
-      item.startDate === "" ||
-      item.startDate === "Invalid Date"
+    item.startDate === "" || item.startDate === "Invalid Date"
       ? now.format("DD.MM.YYYY")
       : item.startDate,
   );
-  const [designation, setDesignation] = useState(
-    item === undefined ? "" : item.designation,
-  );
-  const [name, setName] = useState(item === undefined ? "" : item.name);
+  const [designation, setDesignation] = useState(item.designation);
+  const [name, setName] = useState(item.name);
   const [approvingOrganization, setApprovingOrganization] = useState(
-    item === undefined ? "" : item.approvingOrganization,
+    item.approvingOrganization,
   );
   const [approvingDate, setApprovingDate] = useState(
-    item === undefined ||
-      item.approvingDate === "" ||
-      item.approvingDate === "Invalid Date"
+    item.approvingDate === "" || item.approvingDate === "Invalid Date"
       ? now.format("DD.MM.YYYY")
       : item.approvingDate,
   );
-  const [endDate, setEndDate] = useState(
-    item === undefined ? "" : item.endDate,
-  );
-  const [state, setState] = useState(item === undefined ? "" : item.state);
-  const [status, setStatus] = useState(item === undefined ? "" : item.status);
+  const [endDate, setEndDate] = useState(item.endDate);
+  const [state, setState] = useState(item.state);
+  const [status, setStatus] = useState(item.status);
   const [informationAboutChanges, setInformationAboutChanges] = useState(
-    item === undefined ? "" : item.informationAboutChanges,
+    item.informationAboutChanges,
   );
-  const [note, setNote] = useState(item === undefined ? "" : item.note);
+  const [note, setNote] = useState(item.note);
   const [responsible, setResponsible] = useState(item?.responsible);
-  const [dateAndNumber, setDateAndNumber] = useState(
-    item === undefined ? "" : item.dateAndNumber,
-  );
+  const [dateAndNumber, setDateAndNumber] = useState(item.dateAndNumber);
 
   const changeData = (item: any, index?: number) => {
     if (index === undefined) {
       setData([
         ...data,
-        { key: data.length + 1, number: data.length + 1, ...item },
+        { ...item, key: data.length + 1, number: data.length + 1 },
       ]);
 
       return;
@@ -80,7 +71,7 @@ const ChangeNDList = ({ isOpen, item, index, setIsOpen }: Props) => {
 
   return (
     <Modal
-      title="Modal"
+      title={title}
       open={isOpen}
       onOk={() => {
         changeData(
@@ -103,9 +94,8 @@ const ChangeNDList = ({ isOpen, item, index, setIsOpen }: Props) => {
         );
         setIsOpen();
       }}
-      onCancel={() => {}}
-      okText="确认"
-      cancelText=""
+      onCancel={setIsOpen}
+      okText="Применить"
     >
       <Typography.Text>Обозначение НД</Typography.Text>
       <TextArea
@@ -207,7 +197,7 @@ const ChangeNDList = ({ isOpen, item, index, setIsOpen }: Props) => {
         mode="multiple"
         size="small"
         placeholder=""
-        defaultValue={responsible !== undefined ? responsible.split(", ") : []}
+        defaultValue={responsible !== "" ? responsible.split(", ") : []}
         onChange={(data) => {
           setResponsible(data.join(", "));
         }}

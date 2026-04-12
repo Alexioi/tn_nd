@@ -54,9 +54,26 @@ const NDTable = () => {
         Добавить НД
       </Button>
       <ChangeNDList
+        title="Добавить НД"
         isOpen={isModalOpen}
         setIsOpen={() => {
           setIsModalOpen(false);
+        }}
+        item={{
+          key: 0,
+          number: 0,
+          designation: "",
+          name: "",
+          approvingOrganization: "",
+          approvingDate: "",
+          startDate: "",
+          endDate: "",
+          dateAndNumber: "",
+          state: "",
+          status: "",
+          informationAboutChanges: "",
+          note: "",
+          responsible: "",
         }}
       />
     </>

@@ -49,6 +49,7 @@ const Menu = ({ item, index }: Props) => {
         <MoreOutlined size={50} />
       </Dropdown>
       <ChangeNDList
+        title="Изменить НД"
         item={item}
         index={index}
         isOpen={isOpen}

@@ -18,7 +18,6 @@ type Item = {
   informationAboutChanges: string;
   note: string;
   responsible: string;
-  isEdible?: boolean;
 };
 
 type Data = Item[];
