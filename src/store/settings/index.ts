@@ -2,16 +2,28 @@ import { create } from "zustand";
 
 type Store = {
   departments: string[];
-  report: { sheet: number; row: number };
+  organizations: string[];
+  states: string[];
+  statuses: string[];
+  reports: { sheet: number; row: number };
   setDepartaments: (departments: string[]) => void;
-  setReport: (settings: { sheet: number; row: number }) => void;
+  setReports: (settings: { sheet: number; row: number }) => void;
+  setStates: (states: string[]) => void;
+  setStatuses: (statuses: string[]) => void;
+  setOrganizations: (departments: string[]) => void;
 };
 
 const useSettings = create<Store>()((set) => ({
   departments: [],
-  report: { sheet: 1, row: 1 },
+  organizations: [],
+  states: [],
+  statuses: [],
+  reports: { sheet: 1, row: 1 },
   setDepartaments: (departments) => set({ departments }),
-  setReport: (settings) => set({ report: settings }),
+  setReports: (reports) => set({ reports }),
+  setStates: (states) => set({ states }),
+  setStatuses: (statuses) => set({ statuses }),
+  setOrganizations: (organizations) => set({ organizations }),
 }));
 
 export { useSettings };

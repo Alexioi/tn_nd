@@ -10,7 +10,7 @@ type Props = {
 
 const DownloadReport = ({ file, departament }: Props) => {
   const { data } = useData();
-  const { report } = useSettings();
+  const { reports } = useSettings();
 
   const handleButtonClick = async () => {
     const border = {
@@ -128,20 +128,20 @@ const DownloadReport = ({ file, departament }: Props) => {
 
     const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
 
-    const sheetName = workbook.SheetNames[report.sheet - 1];
+    const sheetName = workbook.SheetNames[reports.sheet - 1];
 
     const worksheet = workbook.Sheets[sheetName];
 
     const allData = [...filteredPAOData, ...filteredOSTData];
 
     worksheet["!merges"] = [
-      utils.decode_range(`A${report.row}:J${report.row}`),
+      utils.decode_range(`A${reports.row}:J${reports.row}`),
       utils.decode_range(
-        `A${report.row + filteredPAOData.length}:J${report.row + filteredPAOData.length}`,
+        `A${reports.row + filteredPAOData.length}:J${reports.row + filteredPAOData.length}`,
       ),
     ];
 
-    utils.sheet_add_aoa(worksheet, allData, { origin: `A${report.row}` });
+    utils.sheet_add_aoa(worksheet, allData, { origin: `A${reports.row}` });
 
     writeFile(workbook, "НД.xlsx");
   };

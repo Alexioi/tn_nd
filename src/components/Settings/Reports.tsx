@@ -1,8 +1,8 @@
 import { Flex, InputNumber, Typography } from "antd";
 import { useSettings } from "../../store";
 
-const Report = () => {
-  const { report, setReport } = useSettings();
+const Reports = () => {
+  const { reports, setReports } = useSettings();
 
   return (
     <Flex gap={10} vertical>
@@ -15,9 +15,9 @@ const Report = () => {
               return;
             }
 
-            setReport({ ...report, sheet: value });
+            setReports({ ...reports, sheet: value });
           }}
-          value={report.sheet}
+          value={reports.sheet}
         />
       </Flex>
 
@@ -30,13 +30,13 @@ const Report = () => {
               return;
             }
 
-            setReport({ ...report, row: value });
+            setReports({ ...reports, row: value });
           }}
-          value={report.row}
+          value={reports.row}
         />
       </Flex>
     </Flex>
   );
 };
 
-export { Report };
+export { Reports };

@@ -1,7 +1,7 @@
 import { Collapse } from "antd";
 
 import { Departaments } from "./Departaments";
-import { Report } from "./Report";
+import { Reports } from "./Reports";
 
 const Settings = () => {
   return (
@@ -16,7 +16,7 @@ const Settings = () => {
         {
           key: "2",
           label: "Настройки отчета",
-          children: <Report />,
+          children: <Reports />,
         },
       ]}
     />
