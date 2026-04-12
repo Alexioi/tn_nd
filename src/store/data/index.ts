@@ -28,4 +28,5 @@ const useData = create<Store>()((set) => ({
   setData: (data) => set({ data }),
 }));
 
+export type { Item };
 export { useData };
