@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 import { utils, writeFile } from "xlsx-js-style";
 
 import { useSettings, useData } from "../../store";
-import { NDTable } from "../NDTable";
-import { UploadDB } from "../UploadDB";
-import { DownloadReport } from "../DownloadReport";
+import { NDTable } from "./NDTable";
+import { UploadDB } from "./UploadDB";
+import { DownloadReport } from "./DownloadReport";
 
 const Main = () => {
   const { departments } = useSettings();
@@ -61,9 +61,9 @@ const Main = () => {
         </Flex>
 
         <Flex gap={10} wrap justify="center">
-          <DownloadReport data={data} />
+          <DownloadReport />
           {departments.map((el, i) => {
-            return <DownloadReport key={i} departament={el} data={data} />;
+            return <DownloadReport key={i} departament={el} />;
           })}
         </Flex>
       </Card>

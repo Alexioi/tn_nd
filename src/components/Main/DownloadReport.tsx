@@ -1,14 +1,15 @@
 import { Button } from "antd";
 import { utils, writeFile } from "xlsx-js-style";
 
-import type { Data } from "./UploudData";
+import { useData } from "../../store";
 
 type Props = {
-  data: Data;
   departament?: string;
 };
 
-const DownloadReport = ({ departament, data }: Props) => {
+const DownloadReport = ({ departament }: Props) => {
+  const { data } = useData();
+
   const handleButtonClick = () => {
     const dataStyle = {
       border: {
@@ -41,7 +42,7 @@ const DownloadReport = ({ departament, data }: Props) => {
       },
     };
 
-    const getDataArray = (data: Data) =>
+    const getDataArray = (data: any[]) =>
       data
         .map(
           ({

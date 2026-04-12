@@ -1,6 +1,3 @@
-export * from "./NDTable";
-export * from "./UploudData";
-export * from "./UploadDB";
-export * from "./DownloadReport";
+export * from "./Main/UploudData";
 export * from "./Settings";
 export * from "./Main";

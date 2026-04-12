@@ -2,7 +2,7 @@ import { Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx-js-style";
 
-import { useSettings } from "../store";
+import { useSettings } from "../../store";
 
 type Item = {
   key: number;
