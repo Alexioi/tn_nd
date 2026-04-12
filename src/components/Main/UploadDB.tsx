@@ -1,34 +1,11 @@
 import { Button, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx-js-style";
 
-import { useSettings } from "../../store";
+import { useData, useSettings } from "../../store";
 
-type Item = {
-  key: number;
-  number: number;
-  designation: string;
-  name: string;
-  approvingOrganization: string;
-  approvingDate: string;
-  startDate: string;
-  endDate: string;
-  dateAndNumber: string;
-  state: string;
-  status: string;
-  informationAboutChanges: string;
-  note: string;
-  responsible: string;
-  isEdible?: boolean;
-};
+const UploadDB = () => {
+  const { setData } = useData();
 
-type Data = Item[];
-
-type Props = {
-  setData(data: Data): void;
-};
-
-const UploadDB = ({ setData }: Props) => {
   const { setDepartaments } = useSettings();
 
   const parseExcelFile = async (file: File) => {
@@ -82,7 +59,7 @@ const UploadDB = ({ setData }: Props) => {
         return false;
       }}
     >
-      <Button icon={<UploadOutlined />}>Загрузить базу данных</Button>
+      <Button>Загрузить базу данных</Button>
     </Upload>
   );
 };

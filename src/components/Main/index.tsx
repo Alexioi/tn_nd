@@ -1,15 +1,19 @@
 import { Button, Card, Flex, Typography } from "antd";
 import dayjs from "dayjs";
 import { utils, writeFile } from "xlsx-js-style";
+import { useState } from "react";
 
 import { useSettings, useData } from "../../store";
 import { NDTable } from "./NDTable";
 import { UploadDB } from "./UploadDB";
 import { DownloadReport } from "./DownloadReport";
+import { ChangeNDList } from "./ChangeNDList";
 
 const Main = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { departments } = useSettings();
-  const { data, setData } = useData();
+  const { data } = useData();
 
   const exportData = () => {
     const worksheet = utils.aoa_to_sheet(
@@ -46,14 +50,48 @@ const Main = () => {
 
   return (
     <Flex style={{ justifyContent: "center" }} gap={20} vertical align="center">
-      <NDTable />
-
-      <Card>
-        <Flex gap={30} justify="center">
-          <UploadDB setData={setData} />
+      <Flex justify="end" style={{ width: "100%" }} gap={20}>
+        {data.length === 0 ? (
+          <UploadDB />
+        ) : (
           <Button onClick={exportData}>Скачать базу данных</Button>
-        </Flex>
-      </Card>
+        )}
+
+        <Button
+          type="primary"
+          onClick={() => {
+            setIsModalOpen(!isModalOpen);
+          }}
+        >
+          Добавить НД
+        </Button>
+      </Flex>
+
+      <ChangeNDList
+        title="Добавить НД"
+        isOpen={isModalOpen}
+        setIsOpen={() => {
+          setIsModalOpen(false);
+        }}
+        item={{
+          key: 0,
+          number: 0,
+          designation: "",
+          name: "",
+          approvingOrganization: "",
+          approvingDate: "",
+          startDate: "",
+          endDate: "",
+          dateAndNumber: "",
+          state: "",
+          status: "",
+          informationAboutChanges: "",
+          note: "",
+          responsible: "",
+        }}
+      />
+
+      <NDTable />
 
       <Card style={{ width: "100%", maxWidth: "800px" }}>
         <Flex justify="center">

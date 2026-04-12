@@ -1,9 +1,7 @@
-import { Button, Empty, Table } from "antd";
+import { Empty, Table } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
 
 import { useData } from "../../../store";
-import { ChangeNDList } from "../ChangeNDList";
 import { getColumns } from "./colums";
 import { Menu } from "./Menu";
 
@@ -11,7 +9,6 @@ dayjs.locale("ru");
 
 const NDTable = () => {
   const { data } = useData();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns = getColumns(data);
 
@@ -43,37 +40,6 @@ const NDTable = () => {
         bordered
         locale={{
           emptyText: <Empty description="Нет данных" />,
-        }}
-      />
-      <Button
-        type="primary"
-        onClick={() => {
-          setIsModalOpen(!isModalOpen);
-        }}
-      >
-        Добавить НД
-      </Button>
-      <ChangeNDList
-        title="Добавить НД"
-        isOpen={isModalOpen}
-        setIsOpen={() => {
-          setIsModalOpen(false);
-        }}
-        item={{
-          key: 0,
-          number: 0,
-          designation: "",
-          name: "",
-          approvingOrganization: "",
-          approvingDate: "",
-          startDate: "",
-          endDate: "",
-          dateAndNumber: "",
-          state: "",
-          status: "",
-          informationAboutChanges: "",
-          note: "",
-          responsible: "",
         }}
       />
     </>
