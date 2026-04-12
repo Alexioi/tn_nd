@@ -1,17 +1,16 @@
-import { Button, Empty, Flex, Table } from "antd";
-import { DeleteFilled } from "@ant-design/icons";
+import { Button, Empty, Table } from "antd";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 import { useData } from "../../../store";
 import { ChangeNDList } from "../ChangeNDList";
-import { useState } from "react";
 import { getColumns } from "./colums";
-import { EditButton } from "./EditButton";
+import { Menu } from "./Menu";
 
 dayjs.locale("ru");
 
 const NDTable = () => {
-  const { data, setData } = useData();
+  const { data } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns = getColumns(data);
@@ -33,29 +32,7 @@ const NDTable = () => {
         dataSource={data.map((el, i) => {
           return {
             ...el,
-            actions: (
-              <Flex gap={10}>
-                <EditButton index={i} item={el} />
-                <Button
-                  type="primary"
-                  danger
-                  // disabled={data.find((el) => el.isEdible) !== undefined}
-                  onClick={() => {
-                    setData(
-                      data
-                        .filter((_, index) => {
-                          return i !== index;
-                        })
-                        .map((el, index) => {
-                          return { ...el, number: index + 1 };
-                        }),
-                    );
-                  }}
-                >
-                  <DeleteFilled />
-                </Button>
-              </Flex>
-            ),
+            designation: <Menu index={i} item={el} />,
           };
         })}
         // @ts-ignore

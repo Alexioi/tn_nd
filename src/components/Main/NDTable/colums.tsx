@@ -118,14 +118,6 @@ const getColumns = (data: Item[]) => [
     width: 200,
     align: "center",
   },
-  {
-    title: "Действие",
-    dataIndex: "actions",
-    key: "actions",
-    fixed: "end",
-    width: 120,
-    align: "center",
-  },
 ];
 
 export { getColumns };
