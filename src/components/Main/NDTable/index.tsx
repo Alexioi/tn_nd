@@ -30,6 +30,8 @@ const NDTable = () => {
           return {
             ...el,
             designation: <Menu index={i} item={el} />,
+            responsible:
+              el.responsible === "" ? "Все подразделения" : el.responsible,
           };
         })}
         // @ts-ignore
