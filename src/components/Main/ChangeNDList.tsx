@@ -1,4 +1,4 @@
-import { DatePicker, Flex, Input, Modal, Select, Typography } from "antd";
+import { DatePicker, Flex, Modal, Select, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -121,7 +121,7 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
           };
         })}
         onSelect={(label) => {
-          setStatus(label);
+          setApprovingOrganization(label);
         }}
       />
       <Flex gap={10}>
