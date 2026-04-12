@@ -108,7 +108,6 @@ const DownloadReport = ({ departament }: Props) => {
           if (typeof el.approvingOrganization !== "string") {
             return false;
           }
-          console.log(el.approvingOrganization);
 
           return el.approvingOrganization.includes("ПАО");
         }),

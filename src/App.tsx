@@ -1,13 +1,10 @@
 import { ConfigProvider, Flex, Tabs } from "antd";
-import { useState } from "react";
 import ruRU from "antd/locale/ru_RU";
 
 import "./style.css";
-import { Main, Settings, UploadData, type Data } from "./components";
+import { Main, Settings, UploadData } from "./components";
 
 const App = () => {
-  const [data, setData] = useState<Data>([]);
-
   return (
     <ConfigProvider
       locale={ruRU}
@@ -29,11 +26,7 @@ const App = () => {
           {
             key: "2",
             label: "Импорт",
-            children: (
-              <>
-                <UploadData data={data} setData={setData} />
-              </>
-            ),
+            children: <UploadData />,
           },
           {
             key: "3",

@@ -3,8 +3,7 @@ import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
 import { useState } from "react";
 
-import type { Item } from "./UploudData";
-import { useData, useSettings } from "../../store";
+import { useData, useSettings, type Item } from "../../store";
 
 type Props = {
   isOpen: boolean;
@@ -134,7 +133,6 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
           <DatePicker
             defaultValue={dayjs(approvingDate, "DD.MM.YYYY")}
             onChange={(date) => {
-              console.log(`${date?.format("DD.MM.YYYY")}`);
               setApprovingDate(`${date?.format("DD.MM.YYYY")}`);
             }}
             style={{ width: "100%" }}
@@ -197,7 +195,11 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
         mode="multiple"
         size="small"
         placeholder=""
-        defaultValue={responsible !== "" ? responsible.split(", ") : []}
+        defaultValue={
+          responsible !== "" && responsible !== undefined
+            ? responsible.split(", ")
+            : []
+        }
         onChange={(data) => {
           setResponsible(data.join(", "));
         }}

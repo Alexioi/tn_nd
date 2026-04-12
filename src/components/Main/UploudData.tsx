@@ -2,32 +2,11 @@ import { Button, Card, Collapse, Flex, Switch, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx-js-style";
 import { useState } from "react";
+import { useData } from "../../store";
 
-type Item = {
-  key: number;
-  number: number;
-  designation: string;
-  name: string;
-  approvingOrganization: string;
-  approvingDate: string;
-  startDate: string;
-  endDate: string;
-  dateAndNumber: string;
-  state: string;
-  status: string;
-  informationAboutChanges: string;
-  note: string;
-  responsible: string;
-};
+const UploadData = () => {
+  const { data, setData } = useData();
 
-type Data = Item[];
-
-type Props = {
-  data: Data;
-  setData(data: Data): void;
-};
-
-const UploadData = ({ data, setData }: Props) => {
   const [history, setHistory] = useState<string[][]>([]);
   const [isAddNew, setIsAddNew] = useState(false);
 
@@ -264,5 +243,4 @@ const UploadData = ({ data, setData }: Props) => {
   );
 };
 
-export type { Data, Item };
 export { UploadData };
