@@ -142,10 +142,16 @@ const DownloadReport = ({ file, departament }: Props) => {
 
     const worksheet = workbook.Sheets[sheetName];
 
-    worksheet["!merges"] = [
-      utils.decode_range(`A${reports.row}:J${reports.row}`),
-      utils.decode_range(`A${reports.row + 4}:J${reports.row + 4}`),
-    ];
+    worksheet["!merges"] = allData.reduce<any>((acc, el, i) => {
+      if (el.length === 1) {
+        return [
+          ...acc,
+          utils.decode_range(`A${reports.row + i}:J${reports.row + i}`),
+        ];
+      }
+
+      return acc;
+    }, []);
 
     utils.sheet_add_aoa(worksheet, allData, { origin: `A${reports.row}` });
 
