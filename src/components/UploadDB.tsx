@@ -2,6 +2,8 @@ import { Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx-js-style";
 
+import { useSettings } from "../store";
+
 type Item = {
   key: number;
   number: number;
@@ -23,11 +25,12 @@ type Item = {
 type Data = Item[];
 
 type Props = {
-  setDepartaments(departments: string[]): void;
   setData(data: Data): void;
 };
 
-const UploadDB = ({ setData, setDepartaments }: Props) => {
+const UploadDB = ({ setData }: Props) => {
+  const { setDepartaments } = useSettings();
+
   const parseExcelFile = async (file: File) => {
     const data = await file.arrayBuffer();
 
@@ -68,7 +71,7 @@ const UploadDB = ({ setData, setDepartaments }: Props) => {
       header: 1,
     });
 
-    setDepartaments(secondWorksheetData[0]);
+    setDepartaments(JSON.parse(secondWorksheetData[0][0]));
   };
 
   return (

@@ -3,3 +3,4 @@ export * from "./UploudData";
 export * from "./UploadDB";
 export * from "./DownloadReport";
 export * from "./Settings";
+export * from "./Main";
