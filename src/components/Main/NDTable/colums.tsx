@@ -1,3 +1,4 @@
+import { Input } from "antd";
 import type { Item } from "../../../store";
 
 const getColumns = (data: Item[]) => [
@@ -16,13 +17,19 @@ const getColumns = (data: Item[]) => [
     fixed: true,
     width: 250,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.designation))].map((el) => ({
-      value: el,
-      text: el,
-    })),
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
+    ),
     onFilter: (value: any, record: any) => {
-      return record.designation.props.item.designation === value;
+      return String(record.designation.props.item.designation).includes(value);
     },
   },
   {
