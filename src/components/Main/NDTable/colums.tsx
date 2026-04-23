@@ -1,7 +1,15 @@
 import { Input } from "antd";
 import type { Item } from "../../../store";
 
-const getColumns = (data: Item[]) => [
+const getColumns = (
+  data: Item[],
+  organizations: {
+    name: string;
+    description: string;
+  }[],
+  states: string[],
+  statuses: string[],
+) => [
   {
     title: "№",
     dataIndex: "number",
@@ -38,13 +46,19 @@ const getColumns = (data: Item[]) => [
     key: "name",
     width: 250,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.name))].map((el) => ({
-      value: el,
-      text: el,
-    })),
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
+    ),
     onFilter: (value: any, record: any) => {
-      return record.name === value;
+      return String(record.name).includes(value);
     },
   },
   {
@@ -56,13 +70,10 @@ const getColumns = (data: Item[]) => [
         key: "approvingOrganization",
         width: 200,
         align: "center",
-        filterSearch: true,
-        filters: [...new Set(data.map((el) => el.approvingOrganization))].map(
-          (el) => ({
-            value: el,
-            text: el,
-          }),
-        ),
+        filters: organizations.map((el) => ({
+          value: el.name,
+          text: el.name,
+        })),
         onFilter: (value: any, record: any) => {
           return record.approvingOrganization === value;
         },
@@ -73,13 +84,19 @@ const getColumns = (data: Item[]) => [
         key: "approvingDate",
         width: 150,
         align: "center",
-        filterSearch: true,
-        filters: [...new Set(data.map((el) => el.approvingDate))].map((el) => ({
-          value: el,
-          text: el,
-        })),
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+          <Input.Search
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              const val = e.target.value;
+
+              setSelectedKeys(val ? [val] : []);
+            }}
+            onSearch={() => confirm()}
+          />
+        ),
         onFilter: (value: any, record: any) => {
-          return record.approvingDate === value;
+          return String(record.approvingDate).includes(value);
         },
       },
     ],
@@ -93,13 +110,19 @@ const getColumns = (data: Item[]) => [
         key: "startDate",
         width: 150,
         align: "center",
-        filterSearch: true,
-        filters: [...new Set(data.map((el) => el.startDate))].map((el) => ({
-          value: el,
-          text: el,
-        })),
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+          <Input.Search
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              const val = e.target.value;
+
+              setSelectedKeys(val ? [val] : []);
+            }}
+            onSearch={() => confirm()}
+          />
+        ),
         onFilter: (value: any, record: any) => {
-          return record.startDate === value;
+          return String(record.startDate).includes(value);
         },
       },
       {
@@ -108,13 +131,19 @@ const getColumns = (data: Item[]) => [
         key: "endDate",
         width: 150,
         align: "center",
-        filterSearch: true,
-        filters: [...new Set(data.map((el) => el.endDate))].map((el) => ({
-          value: el,
-          text: el,
-        })),
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+          <Input.Search
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              const val = e.target.value;
+
+              setSelectedKeys(val ? [val] : []);
+            }}
+            onSearch={() => confirm()}
+          />
+        ),
         onFilter: (value: any, record: any) => {
-          return record.endDate === value;
+          return String(record.endDate).includes(value);
         },
       },
     ],
@@ -126,13 +155,19 @@ const getColumns = (data: Item[]) => [
     key: "dateAndNumber",
     width: 150,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.dateAndNumber))].map((el) => ({
-      value: el,
-      text: el,
-    })),
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
+    ),
     onFilter: (value: any, record: any) => {
-      return record.dateAndNumber === value;
+      return String(record.dateAndNumber).includes(value);
     },
   },
   {
@@ -141,8 +176,7 @@ const getColumns = (data: Item[]) => [
     key: "state",
     width: 150,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.state))].map((el) => ({
+    filters: states.map((el) => ({
       value: el,
       text: el,
     })),
@@ -156,8 +190,7 @@ const getColumns = (data: Item[]) => [
     key: "status",
     width: 200,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.status))].map((el) => ({
+    filters: statuses.map((el) => ({
       value: el,
       text: el,
     })),
@@ -171,15 +204,19 @@ const getColumns = (data: Item[]) => [
     key: "informationAboutChanges",
     width: 250,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.informationAboutChanges))].map(
-      (el) => ({
-        value: el,
-        text: el,
-      }),
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
     ),
     onFilter: (value: any, record: any) => {
-      return record.informationAboutChanges === value;
+      return String(record.informationAboutChanges).includes(value);
     },
   },
   {
@@ -188,13 +225,19 @@ const getColumns = (data: Item[]) => [
     key: "note",
     width: 250,
     align: "center",
-    filterSearch: true,
-    filters: [...new Set(data.map((el) => el.note))].map((el) => ({
-      value: el,
-      text: el,
-    })),
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
+    ),
     onFilter: (value: any, record: any) => {
-      return record.note === value;
+      return String(record.note).includes(value);
     },
   },
   {
@@ -204,14 +247,24 @@ const getColumns = (data: Item[]) => [
     key: "responsible",
     width: 200,
     align: "center",
-    // filterSearch: true,
-    // filters: [...new Set(data.map((el) => el.responsible))].map((el) => ({
-    //   value: el,
-    //   text: el,
-    // })),
-    // onFilter: (value: any, record: any) => {
-    //   return record.responsible.include(value);
-    // },
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }: any) => (
+      <Input.Search
+        value={selectedKeys[0]}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          setSelectedKeys(val ? [val] : []);
+        }}
+        onSearch={() => confirm()}
+      />
+    ),
+    onFilter: (value: any, record: any) => {
+      if (value === "Все подразделения") {
+        return record.responsible === "Все подразделения";
+      }
+
+      return String(record.responsible).includes(value);
+    },
   },
 ];
 

@@ -1,7 +1,7 @@
 import { Empty, Table } from "antd";
 import dayjs from "dayjs";
 
-import { useData } from "../../../store";
+import { useData, useSettings } from "../../../store";
 import { getColumns } from "./colums";
 import { Menu } from "./Menu";
 
@@ -9,8 +9,9 @@ dayjs.locale("ru");
 
 const NDTable = () => {
   const { data } = useData();
+  const { organizations, states, statuses } = useSettings();
 
-  const columns = getColumns(data);
+  const columns = getColumns(data, organizations, states, statuses);
 
   return (
     <>
