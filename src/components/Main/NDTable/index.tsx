@@ -11,7 +11,7 @@ const NDTable = () => {
   const { data } = useData();
   const { organizations, states, statuses } = useSettings();
 
-  const columns = getColumns(data, organizations, states, statuses);
+  const columns = getColumns(organizations, states, statuses);
 
   return (
     <>
