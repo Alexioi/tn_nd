@@ -22,9 +22,9 @@ const UploadData = () => {
       .sheet_to_json(worksheet, { header: 1 })
       .map((el: any) => {
         return {
-          designation: el[0],
-          name: el[1],
-          approvingOrganization: el[2],
+          designation: el[0] || "",
+          name: el[1] || "",
+          approvingOrganization: el[2] || "",
           approvingDate: el[3]
             ? new Date((el[3] - 25569) * 86400 * 1000).toLocaleDateString(
                 "ru-RU",
@@ -35,13 +35,13 @@ const UploadData = () => {
                 "ru-RU",
               )
             : "",
-          endDate: el[5],
-          dateAndNumber: el[6],
-          state: el[7],
-          status: el[8],
-          informationAboutChanges: el[9],
-          note: el[10],
-          responsible: el[11],
+          endDate: el[5] || "",
+          dateAndNumber: el[6] || "",
+          state: el[7] || "",
+          status: el[8] || "",
+          informationAboutChanges: el[9] || "",
+          note: el[10] || "",
+          responsible: el[11] || "",
         };
       });
 
