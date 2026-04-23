@@ -1,8 +1,6 @@
 import { Input } from "antd";
-import type { Item } from "../../../store";
 
 const getColumns = (
-  data: Item[],
   organizations: {
     name: string;
     description: string;
