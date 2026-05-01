@@ -14,38 +14,36 @@ const NDTable = () => {
   const columns = getColumns(organizations, states, statuses);
 
   return (
-    <>
-      <Table
-        virtual
-        pagination={false}
-        rowClassName={(record) => {
-          if (typeof record.state === "string") {
-            return record.state.toLocaleLowerCase().includes("отмененный")
-              ? "row-color-warning"
-              : "";
-          }
+    <Table
+      virtual
+      pagination={false}
+      onRow={({ state }) => {
+        const color = states.find((el) => el.name === state)?.color;
 
-          return "";
-        }}
-        dataSource={data.map((el, i) => {
-          return {
-            ...el,
-            designation: <Menu index={i} item={el} />,
-            responsible:
-              el.responsible === "" ? "Все подразделения" : el.responsible,
-          };
-        })}
-        // @ts-ignore
-        columns={columns}
-        scroll={{ x: 2000, y: 400 }}
-        style={{ width: "100%", whiteSpace: "pre-wrap" }}
-        size="small"
-        bordered
-        locale={{
-          emptyText: <Empty description="Нет данных" />,
-        }}
-      />
-    </>
+        return {
+          style: {
+            backgroundColor: color,
+          },
+        };
+      }}
+      dataSource={data.map((el, i) => {
+        return {
+          ...el,
+          designation: <Menu index={i} item={el} />,
+          responsible:
+            el.responsible === "" ? "Все подразделения" : el.responsible,
+        };
+      })}
+      // @ts-ignore
+      columns={columns}
+      scroll={{ x: 2000, y: 400 }}
+      style={{ width: "100%", whiteSpace: "pre-wrap" }}
+      size="small"
+      bordered
+      locale={{
+        emptyText: <Empty description="Нет данных" />,
+      }}
+    />
   );
 };
 

@@ -5,7 +5,7 @@ const getColumns = (
     name: string;
     description: string;
   }[],
-  states: string[],
+  states: { name: string; color: string }[],
   statuses: string[],
 ) => [
   {

@@ -166,8 +166,8 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
         defaultValue={state}
         options={states.map((el) => {
           return {
-            value: el,
-            labal: el,
+            value: el.name,
+            labal: el.name,
           };
         })}
         onSelect={(label) => {

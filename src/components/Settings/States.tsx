@@ -1,20 +1,34 @@
-import { Button, Flex, Input, Typography } from "antd";
+import { Button, ColorPicker, Flex, Input, Typography } from "antd";
 import { useState } from "react";
 
 import { useSettings } from "../../store";
 
 const States = () => {
   const { states, setStates } = useSettings();
-  const [status, setStatus] = useState("");
+  const [state, setState] = useState("");
 
   return (
     <Flex vertical gap={10} justify="center">
       {states.map((el, i) => {
         return (
-          <Flex gap={10} align="center" key={el} justify="space-between">
+          <Flex gap={10} align="center" key={el.name} justify="space-between">
             <Typography.Text strong style={{ fontSize: "20px" }}>
-              {el}
+              {el.name}
             </Typography.Text>
+            <ColorPicker
+              value={el.color}
+              onChange={(_, css) => {
+                setStates(
+                  states.map((subEl, subI) => {
+                    if (subI === i) {
+                      return { ...subEl, color: css };
+                    }
+
+                    return subEl;
+                  }),
+                );
+              }}
+            />
 
             <Button
               type="primary"
@@ -34,20 +48,20 @@ const States = () => {
       })}
       <Input
         onChange={(value) => {
-          setStatus(value.target.value);
+          setState(value.target.value);
         }}
-        value={status}
+        value={state}
       />
       <Button
         type="primary"
         onClick={() => {
-          setStates([...states, status]);
-          setStatus("");
+          setStates([...states, { name: state, color: "#FFFFFF" }]);
+          setState("");
         }}
         disabled={
           states.find((el) => {
-            return el === status;
-          }) !== undefined || status === ""
+            return el.name === state;
+          }) !== undefined || state === ""
         }
       >
         добавить

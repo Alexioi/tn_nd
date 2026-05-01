@@ -1,7 +1,6 @@
 import { ConfigProvider, Flex, Tabs } from "antd";
 import ruRU from "antd/locale/ru_RU";
 
-import "./style.css";
 import { Main, Settings, UploadData } from "./components";
 
 const App = () => {
