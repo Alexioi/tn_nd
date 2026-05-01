@@ -1,30 +1,21 @@
-import { Button, Flex, Input } from "antd";
+import { Button, Flex, Input, Typography } from "antd";
+import { useState } from "react";
 
 import { useSettings } from "../../store";
 
 const States = () => {
   const { states, setStates } = useSettings();
+  const [status, setStatus] = useState("");
 
   return (
     <Flex vertical gap={10} justify="center">
       {states.map((el, i) => {
         return (
-          <Flex gap={10}>
-            <Input
-              key={i}
-              onChange={(value) => {
-                const newStates = states.map((subEl, index) => {
-                  if (i === index) {
-                    return value.target.value;
-                  }
+          <Flex gap={10} align="center" key={el} justify="space-between">
+            <Typography.Text strong style={{ fontSize: "20px" }}>
+              {el}
+            </Typography.Text>
 
-                  return subEl;
-                });
-
-                setStates(newStates);
-              }}
-              value={el}
-            />
             <Button
               type="primary"
               danger
@@ -41,15 +32,22 @@ const States = () => {
           </Flex>
         );
       })}
+      <Input
+        onChange={(value) => {
+          setStatus(value.target.value);
+        }}
+        value={status}
+      />
       <Button
         type="primary"
         onClick={() => {
-          setStates([...states, ""]);
+          setStates([...states, status]);
+          setStatus("");
         }}
         disabled={
           states.find((el) => {
-            return el === "";
-          }) !== undefined
+            return el === status;
+          }) !== undefined || status === ""
         }
       >
         добавить
