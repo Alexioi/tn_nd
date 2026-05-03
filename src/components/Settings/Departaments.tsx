@@ -1,30 +1,21 @@
-import { Button, Flex, Input } from "antd";
+import { Button, Flex, Input, Typography } from "antd";
+import { useState } from "react";
 
 import { useSettings } from "../../store";
 
 const Departaments = () => {
   const { departments, setDepartaments } = useSettings();
+  const [department, setDepartment] = useState("");
 
   return (
     <Flex vertical gap={10} justify="center">
       {departments.map((el, i) => {
         return (
-          <Flex gap={10}>
-            <Input
-              key={i}
-              onChange={(value) => {
-                const newDepartaments = departments.map((subEl, index) => {
-                  if (i === index) {
-                    return value.target.value;
-                  }
+          <Flex gap={10} align="center" key={el} justify="space-between">
+            <Typography.Text strong style={{ fontSize: "20px" }}>
+              {el}
+            </Typography.Text>
 
-                  return subEl;
-                });
-
-                setDepartaments(newDepartaments);
-              }}
-              value={el}
-            />
             <Button
               type="primary"
               danger
@@ -41,15 +32,22 @@ const Departaments = () => {
           </Flex>
         );
       })}
+      <Input
+        onChange={(value) => {
+          setDepartment(value.target.value);
+        }}
+        value={department}
+      />
       <Button
         type="primary"
         onClick={() => {
-          setDepartaments([...departments, ""]);
+          setDepartaments([...departments, department]);
+          setDepartment("");
         }}
         disabled={
           departments.find((el) => {
-            return el === "";
-          }) !== undefined
+            return el === department;
+          }) !== undefined || department === ""
         }
       >
         добавить
