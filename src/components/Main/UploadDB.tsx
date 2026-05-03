@@ -6,7 +6,13 @@ import { useData, useSettings } from "../../store";
 const UploadDB = () => {
   const { setData } = useData();
 
-  const { setDepartaments } = useSettings();
+  const {
+    setDepartaments,
+    setReports,
+    setOrganizations,
+    setStates,
+    setStatuses,
+  } = useSettings();
 
   const parseExcelFile = async (file: File) => {
     const data = await file.arrayBuffer();
@@ -49,6 +55,10 @@ const UploadDB = () => {
     });
 
     setDepartaments(JSON.parse(secondWorksheetData[0][0]));
+    setOrganizations(JSON.parse(secondWorksheetData[1][0]));
+    setStates(JSON.parse(secondWorksheetData[2][0]));
+    setStatuses(JSON.parse(secondWorksheetData[3][0]));
+    setReports(JSON.parse(secondWorksheetData[4][0]));
   };
 
   return (
