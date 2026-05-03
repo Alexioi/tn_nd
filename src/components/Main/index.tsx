@@ -12,7 +12,8 @@ import { ReportCard } from "./ReportCard";
 const Main = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { departments } = useSettings();
+  const { departments, organizations, states, statuses, reports } =
+    useSettings();
   const { data } = useData();
 
   const exportData = () => {
@@ -39,7 +40,13 @@ const Main = () => {
 
     utils.book_append_sheet(workbook, worksheet, "НД");
 
-    const settings = utils.aoa_to_sheet([[JSON.stringify(departments)]]);
+    const settings = utils.aoa_to_sheet([
+      [JSON.stringify(departments)],
+      [JSON.stringify(organizations)],
+      [JSON.stringify(states)],
+      [JSON.stringify(statuses)],
+      [JSON.stringify(reports)],
+    ]);
 
     utils.book_append_sheet(workbook, settings, "Настройки");
 
