@@ -1,56 +1,36 @@
 import { Button, Flex, Input, Typography } from "antd";
 import { useSettings } from "../../store";
+import { useState } from "react";
 
 const Organizations = () => {
   const { organizations, setOrganizations } = useSettings();
+  const [organization, setOrganization] = useState("");
 
   return (
     <Flex vertical gap={10} justify="center">
       {organizations.map((el, i) => {
         return (
-          <Flex gap={10} key={i}>
-            <Flex gap={10}>
-              <div>
-                <Typography.Text>Название</Typography.Text>
-                <Input
-                  onChange={({ target }) => {
-                    const newOrganizations = organizations.map(
-                      (subEl, index) => {
-                        if (i === index) {
-                          return { ...subEl, name: target.value };
-                        }
+          <Flex gap={10} key={el.name}>
+            <Typography.Text strong style={{ fontSize: "20px" }}>
+              {el.name}
+            </Typography.Text>
 
-                        return subEl;
-                      },
-                    );
+            <Typography.Text>Описание</Typography.Text>
+            <Input
+              key={i}
+              onChange={({ target }) => {
+                const newOrganizations = organizations.map((subEl, index) => {
+                  if (i === index) {
+                    return { ...subEl, description: target.value };
+                  }
 
-                    setOrganizations(newOrganizations);
-                  }}
-                  value={el.name}
-                />
-              </div>
+                  return subEl;
+                });
 
-              <div>
-                <Typography.Text>Описание</Typography.Text>
-                <Input
-                  key={i}
-                  onChange={({ target }) => {
-                    const newOrganizations = organizations.map(
-                      (subEl, index) => {
-                        if (i === index) {
-                          return { ...subEl, description: target.value };
-                        }
-
-                        return subEl;
-                      },
-                    );
-
-                    setOrganizations(newOrganizations);
-                  }}
-                  value={el.description}
-                />
-              </div>
-            </Flex>
+                setOrganizations(newOrganizations);
+              }}
+              value={el.description}
+            />
 
             <Button
               type="primary"
@@ -68,11 +48,26 @@ const Organizations = () => {
           </Flex>
         );
       })}
+      <Input
+        onChange={(value) => {
+          setOrganization(value.target.value);
+        }}
+        value={organization}
+      />
       <Button
         type="primary"
         onClick={() => {
-          setOrganizations([...organizations, { name: "", description: "" }]);
+          setOrganizations([
+            ...organizations,
+            { name: organization, description: "" },
+          ]);
+          setOrganization("");
         }}
+        disabled={
+          organizations.find((el) => {
+            return el.name === organization;
+          }) !== undefined || organization === ""
+        }
       >
         добавить
       </Button>
