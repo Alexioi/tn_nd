@@ -1,5 +1,6 @@
 import { Button } from "antd";
-import { readFile, utils, writeFile } from "xlsx-js-style";
+import ExcelJS from "exceljs";
+// import { readFile, utils, writeFile } from "xlsx-js-style";
 
 import { useData, useSettings } from "../../store";
 
@@ -14,15 +15,18 @@ const DownloadReport = ({ file, departament }: Props) => {
 
   const handleButtonClick = async () => {
     const border = {
-      top: { style: "thin", color: { rgb: "000000" } },
-      bottom: {
-        style: "thin",
-        color: { rgb: "000000" },
-      },
-      left: { style: "thin", color: { rgb: "000000" } },
-      right: {
-        style: "thin",
-        color: { rgb: "000000" },
+      top: { style: "thin" as const },
+      bottom: { style: "thin" as const },
+      left: { style: "thin" as const },
+      right: { style: "thin" as const },
+    };
+
+    const headerStyle = {
+      border,
+      fill: {
+        type: "pattern" as const,
+        pattern: "solid" as const,
+        fgColor: { argb: "FFE0E0E0" },
       },
     };
 
@@ -30,15 +34,21 @@ const DownloadReport = ({ file, departament }: Props) => {
       border,
     };
 
-    const headerStyle = {
-      fill: { fgColor: { rgb: "E0E0E0" } },
-      border,
-    };
-
     const getDataArray = (data: any[]) =>
-      data
-        .map(
-          ({
+      data.map(
+        ({
+          designation,
+          name,
+          approvingOrganization,
+          approvingDate,
+          startDate,
+          endDate,
+          state,
+          status,
+          informationAboutChanges,
+          note,
+        }) => {
+          return [
             designation,
             name,
             approvingOrganization,
@@ -49,28 +59,9 @@ const DownloadReport = ({ file, departament }: Props) => {
             status,
             informationAboutChanges,
             note,
-          }) => {
-            return {
-              designation,
-              name,
-              approvingOrganization,
-              approvingDate,
-              startDate,
-              endDate,
-              state,
-              status,
-              informationAboutChanges,
-              note,
-            };
-          },
-        )
-        .map((el) => {
-          return Object.entries(el).map(([_, value]) => ({
-            v: String(value || ""),
-            t: "s",
-            s: dataStyle,
-          }));
-        });
+          ];
+        },
+      );
 
     const filteredData = data.filter((el) => {
       if (el.state === "Отмененный") {
@@ -111,53 +102,116 @@ const DownloadReport = ({ file, departament }: Props) => {
         return [...acc, { names: [el.name], description: el.description }];
       }, []);
 
-    console.log(mergeOrganizations);
-
     const allData = mergeOrganizations
       .map((el) => {
-        return [
-          [
-            {
-              v: el.description,
-              t: "s",
-              s: headerStyle,
-            },
-          ],
-          ...getDataArray(
-            filteredData.filter((subEl) => {
-              if (typeof subEl.approvingOrganization !== "string") {
-                return false;
-              }
+        const rows = getDataArray(
+          filteredData.filter((subEl) => {
+            if (typeof subEl.approvingOrganization !== "string") {
+              return false;
+            }
 
-              return el.names.includes(subEl.approvingOrganization);
-            }),
-          ),
-        ];
+            return el.names.includes(subEl.approvingOrganization);
+          }),
+        );
+
+        return {
+          description: el.description,
+          rows,
+        };
       })
-      .reduce((acc, el) => {
-        return [...acc, ...el];
-      }, []);
+      .filter((el) => el.rows.length > 0);
 
-    const workbook = readFile(await file.arrayBuffer(), { cellStyles: true });
+    try {
+      // Создаем новую книгу ExcelJS и загружаем существующий файл
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await file.arrayBuffer());
 
-    const sheetName = workbook.SheetNames[reports.sheet - 1];
+      // Получаем нужный лист (reports.sheet - это номер листа)
+      const worksheet = workbook.getWorksheet(reports.sheet);
 
-    const worksheet = workbook.Sheets[sheetName];
-
-    worksheet["!merges"] = allData.reduce<any>((acc, el, i) => {
-      if (el.length === 1) {
-        return [
-          ...acc,
-          utils.decode_range(`A${reports.row + i}:J${reports.row + i}`),
-        ];
+      if (!worksheet) {
+        console.error("Лист не найден");
+        return;
       }
 
-      return acc;
-    }, []);
+      let currentRow = reports.row;
 
-    utils.sheet_add_aoa(worksheet, allData, { origin: `A${reports.row}` });
+      // Добавляем данные по организациям
+      allData.forEach((orgData) => {
+        // Добавляем заголовок организации
+        const headerRow = worksheet.getRow(currentRow);
 
-    writeFile(workbook, "НД.xlsx");
+        // Мержим ячейки для заголовка
+        worksheet.mergeCells(currentRow, 1, currentRow, 10);
+
+        // Устанавливаем значение и стиль заголовка
+        const headerCell = headerRow.getCell(1);
+        headerCell.value = orgData.description;
+        headerCell.style = {
+          ...headerStyle,
+          alignment: { vertical: "middle", horizontal: "left" },
+        };
+
+        // Применяем стили ко всем ячейкам в заголовке
+        for (let col = 1; col <= 10; col++) {
+          const cell = headerRow.getCell(col);
+          cell.style = {
+            ...headerStyle,
+            alignment: { vertical: "middle", horizontal: "left" },
+          };
+        }
+
+        headerRow.commit();
+        currentRow++;
+
+        // Добавляем данные организации
+        orgData.rows.forEach((rowData) => {
+          const dataRow = worksheet.getRow(currentRow);
+
+          rowData.forEach((value, index) => {
+            const cell = dataRow.getCell(index + 1);
+            cell.value = value || "";
+            cell.style = {
+              ...dataStyle,
+              alignment: { vertical: "middle", horizontal: "left" },
+            };
+          });
+
+          dataRow.commit();
+          currentRow++;
+        });
+      });
+
+      // Настраиваем ширину колонок (опционально)
+      // worksheet.columns = worksheet.columns || [];
+      // for (let i = 1; i <= 10; i++) {
+      //   if (
+      //     !worksheet.getColumn(i)?.width ||
+      //     worksheet.getColumn(i).width < 15
+      //   ) {
+      //     worksheet.getColumn(i).width = 15;
+      //   }
+      // }
+
+      // Генерируем файл
+      const buffer = await workbook.xlsx.writeBuffer();
+
+      // Создаем Blob и скачиваем
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "НД.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Ошибка при создании отчета:", error);
+    }
   };
 
   return (
