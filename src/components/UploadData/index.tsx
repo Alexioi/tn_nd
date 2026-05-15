@@ -182,8 +182,8 @@ const UploadData = () => {
     setHistory([...history, log]);
 
     setData(
-      [...changeData, ...newFileData].map((el, i) => {
-        return { ...el, key: i, number: i + 1 };
+      [...changeData, ...newFileData].map((el) => {
+        return { ...el };
       }),
     );
   };

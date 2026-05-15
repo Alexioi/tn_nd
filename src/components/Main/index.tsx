@@ -81,8 +81,6 @@ const Main = () => {
           setIsModalOpen(false);
         }}
         item={{
-          key: 0,
-          number: 0,
           designation: "",
           name: "",
           approvingOrganization: "",

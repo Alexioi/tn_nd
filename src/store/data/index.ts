@@ -1,8 +1,6 @@
 import { create } from "zustand";
 
 type Item = {
-  key: number;
-  number: number;
   designation: string;
   name: string;
   approvingOrganization: string;
