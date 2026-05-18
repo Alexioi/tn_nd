@@ -27,10 +27,8 @@ const UploadDB = () => {
     });
 
     setData(
-      firstWorksheetData.map((el, i) => {
+      firstWorksheetData.map((el) => {
         return {
-          key: i,
-          number: i + 1,
           designation: el[0],
           name: el[1],
           approvingOrganization: el[2],
