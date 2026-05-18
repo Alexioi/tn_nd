@@ -175,8 +175,8 @@ const getColumns = (
     width: 150,
     align: "center",
     filters: states.map((el) => ({
-      value: el,
-      text: el,
+      value: el.name,
+      text: el.name,
     })),
     onFilter: (value: any, record: any) => {
       return record.state === value;
