@@ -2,6 +2,7 @@ import { Button, Card, Collapse, Flex, Switch, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { read, utils } from "xlsx-js-style";
 import { useState } from "react";
+
 import { useData } from "../../store";
 
 const UploadData = () => {
@@ -56,6 +57,7 @@ const UploadData = () => {
           "Дата утверждения": ${el.approvingDate}
           "Дата начала действия": ${el.startDate}
           "Дата окончания действия": ${el.endDate}
+          "Дата, номер приказа": ${el.dateAndNumber}
           "Состояние НД": ${el.state}
           "Статус НД": ${el.status}
           "Сведения об изменениях": ${el.informationAboutChanges}
@@ -77,6 +79,7 @@ const UploadData = () => {
           "Дата утверждения": ${el.approvingDate}
           "Дата начала действия": ${el.startDate}
           "Дата окончания действия": ${el.endDate}
+          "Дата, номер приказа": ${el.dateAndNumber}
           "Состояние НД": ${el.state}
           "Статус НД": ${el.status}
           "Сведения об изменениях": ${el.informationAboutChanges}
@@ -126,6 +129,12 @@ const UploadData = () => {
       if (el.endDate !== item.endDate) {
         logStrings.push(
           `"Дата окончания действия": ${el.endDate} => ${item.endDate}`,
+        );
+      }
+
+      if (el.dateAndNumber !== item.dateAndNumber) {
+        logStrings.push(
+          `"Дата, номер приказа": ${el.dateAndNumber} => ${item.dateAndNumber}`,
         );
       }
 
