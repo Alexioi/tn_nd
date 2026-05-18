@@ -1,4 +1,12 @@
-import { Button, ColorPicker, Flex, Input, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  ColorPicker,
+  Flex,
+  Input,
+  Typography,
+} from "antd";
 import { useState } from "react";
 
 import { useSettings } from "../../store";
@@ -11,39 +19,59 @@ const States = () => {
     <Flex vertical gap={10} justify="center">
       {states.map((el, i) => {
         return (
-          <Flex gap={10} align="center" key={el.name} justify="space-between">
-            <Typography.Text strong style={{ fontSize: "20px" }}>
-              {el.name}
-            </Typography.Text>
-            <ColorPicker
-              value={el.color}
-              onChange={(_, css) => {
-                setStates(
-                  states.map((subEl, subI) => {
-                    if (subI === i) {
-                      return { ...subEl, color: css };
-                    }
+          <Card key={el.name}>
+            <Flex gap={10} align="center" justify="space-between">
+              <Flex vertical align="start">
+                <Typography.Text strong style={{ fontSize: "20px" }}>
+                  {el.name}
+                </Typography.Text>
+                <Typography.Text>Подсветка</Typography.Text>
+                <ColorPicker
+                  value={el.color}
+                  onChange={(_, css) => {
+                    setStates(
+                      states.map((subEl, subI) => {
+                        if (subI === i) {
+                          return { ...subEl, color: css };
+                        }
 
-                    return subEl;
-                  }),
-                );
-              }}
-            />
+                        return subEl;
+                      }),
+                    );
+                  }}
+                />
+                <Typography.Text>Добавлять в отчет</Typography.Text>
+                <Checkbox
+                  checked={el.added}
+                  onChange={() => {
+                    setStates(
+                      states.map((subEl, subI) => {
+                        if (subI === i) {
+                          return { ...subEl, added: !subEl.added };
+                        }
 
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                setStates(
-                  states.filter((_, index) => {
-                    return index !== i;
-                  }),
-                );
-              }}
-            >
-              Удалить
-            </Button>
-          </Flex>
+                        return subEl;
+                      }),
+                    );
+                  }}
+                />
+              </Flex>
+
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  setStates(
+                    states.filter((_, index) => {
+                      return index !== i;
+                    }),
+                  );
+                }}
+              >
+                Удалить
+              </Button>
+            </Flex>
+          </Card>
         );
       })}
       <Input
@@ -55,7 +83,10 @@ const States = () => {
       <Button
         type="primary"
         onClick={() => {
-          setStates([...states, { name: state, color: "#FFFFFF" }]);
+          setStates([
+            ...states,
+            { name: state, color: "#FFFFFF", added: true },
+          ]);
           setState("");
         }}
         disabled={

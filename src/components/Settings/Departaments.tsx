@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Typography } from "antd";
+import { Button, Card, Flex, Input, Typography } from "antd";
 import { useState } from "react";
 
 import { useSettings } from "../../store";
@@ -11,25 +11,27 @@ const Departaments = () => {
     <Flex vertical gap={10} justify="center">
       {departments.map((el, i) => {
         return (
-          <Flex gap={10} align="center" key={el} justify="space-between">
-            <Typography.Text strong style={{ fontSize: "20px" }}>
-              {el}
-            </Typography.Text>
+          <Card key={el}>
+            <Flex gap={10} align="center" justify="space-between">
+              <Typography.Text strong style={{ fontSize: "20px" }}>
+                {el}
+              </Typography.Text>
 
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                setDepartaments(
-                  departments.filter((_, index) => {
-                    return index !== i;
-                  }),
-                );
-              }}
-            >
-              Удалить
-            </Button>
-          </Flex>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  setDepartaments(
+                    departments.filter((_, index) => {
+                      return index !== i;
+                    }),
+                  );
+                }}
+              >
+                Удалить
+              </Button>
+            </Flex>
+          </Card>
         );
       })}
       <Input

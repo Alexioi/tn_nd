@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Typography } from "antd";
+import { Button, Card, Flex, Input, Typography } from "antd";
 import { useSettings } from "../../store";
 import { useState } from "react";
 
@@ -10,42 +10,48 @@ const Organizations = () => {
     <Flex vertical gap={10} justify="center">
       {organizations.map((el, i) => {
         return (
-          <Flex gap={10} key={el.name}>
-            <Typography.Text strong style={{ fontSize: "20px" }}>
-              {el.name}
-            </Typography.Text>
+          <Card key={el.name}>
+            <Flex gap={10} justify="space-between" align="center">
+              <Flex vertical style={{ width: "100%" }}>
+                <Typography.Text strong style={{ fontSize: "20px" }}>
+                  {el.name}
+                </Typography.Text>
+                <Typography.Text>Описание</Typography.Text>
+                <Input
+                  style={{ display: "block" }}
+                  key={i}
+                  onChange={({ target }) => {
+                    const newOrganizations = organizations.map(
+                      (subEl, index) => {
+                        if (i === index) {
+                          return { ...subEl, description: target.value };
+                        }
 
-            <Typography.Text>Описание</Typography.Text>
-            <Input
-              key={i}
-              onChange={({ target }) => {
-                const newOrganizations = organizations.map((subEl, index) => {
-                  if (i === index) {
-                    return { ...subEl, description: target.value };
-                  }
+                        return subEl;
+                      },
+                    );
 
-                  return subEl;
-                });
+                    setOrganizations(newOrganizations);
+                  }}
+                  value={el.description}
+                />
+              </Flex>
 
-                setOrganizations(newOrganizations);
-              }}
-              value={el.description}
-            />
-
-            <Button
-              type="primary"
-              danger
-              onClick={() => {
-                setOrganizations(
-                  organizations.filter((_, index) => {
-                    return index !== i;
-                  }),
-                );
-              }}
-            >
-              Удалить
-            </Button>
-          </Flex>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  setOrganizations(
+                    organizations.filter((_, index) => {
+                      return index !== i;
+                    }),
+                  );
+                }}
+              >
+                Удалить
+              </Button>
+            </Flex>
+          </Card>
         );
       })}
       <Input

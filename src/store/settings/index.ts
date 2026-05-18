@@ -3,12 +3,14 @@ import { create } from "zustand";
 type Store = {
   departments: string[];
   organizations: { name: string; description: string }[];
-  states: { name: string; color: string }[];
+  states: { name: string; color: string; added: boolean }[];
   statuses: string[];
   reports: { sheet: number; row: number };
   setDepartaments: (departments: string[]) => void;
   setReports: (settings: { sheet: number; row: number }) => void;
-  setStates: (states: { name: string; color: string }[]) => void;
+  setStates: (
+    states: { name: string; color: string; added: boolean }[],
+  ) => void;
   setStatuses: (statuses: string[]) => void;
   setOrganizations: (
     departments: { name: string; description: string }[],
