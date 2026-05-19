@@ -63,6 +63,7 @@ const DownloadReport = ({ file, departament }: Props) => {
       );
 
     const filteredData = data.filter((el) => {
+      // todo
       if (el.state === "Отмененный") {
         return false;
       }
@@ -75,7 +76,10 @@ const DownloadReport = ({ file, departament }: Props) => {
         return false;
       }
 
-      return el.responsible.split(", ").includes(departament);
+      return (
+        el.responsible.split(", ").includes(departament) ||
+        el.responsible === ""
+      );
     });
 
     const mergeOrganizations = organizations
@@ -121,11 +125,9 @@ const DownloadReport = ({ file, departament }: Props) => {
       .filter((el) => el.rows.length > 0);
 
     try {
-      // Создаем новую книгу ExcelJS и загружаем существующий файл
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(await file.arrayBuffer());
 
-      // Получаем нужный лист (reports.sheet - это номер листа)
       const worksheet = workbook.getWorksheet(reports.sheet);
 
       if (!worksheet) {
@@ -135,15 +137,11 @@ const DownloadReport = ({ file, departament }: Props) => {
 
       let currentRow = reports.row;
 
-      // Добавляем данные по организациям
       allData.forEach((orgData) => {
-        // Добавляем заголовок организации
         const headerRow = worksheet.getRow(currentRow);
 
-        // Мержим ячейки для заголовка
         worksheet.mergeCells(currentRow, 1, currentRow, 10);
 
-        // Устанавливаем значение и стиль заголовка
         const headerCell = headerRow.getCell(1);
         headerCell.value = orgData.description;
         headerCell.style = {
@@ -151,7 +149,6 @@ const DownloadReport = ({ file, departament }: Props) => {
           alignment: { vertical: "middle", horizontal: "left" },
         };
 
-        // Применяем стили ко всем ячейкам в заголовке
         for (let col = 1; col <= 10; col++) {
           const cell = headerRow.getCell(col);
           cell.style = {
@@ -163,7 +160,6 @@ const DownloadReport = ({ file, departament }: Props) => {
         headerRow.commit();
         currentRow++;
 
-        // Добавляем данные организации
         orgData.rows.forEach((rowData) => {
           const dataRow = worksheet.getRow(currentRow);
 
@@ -181,21 +177,8 @@ const DownloadReport = ({ file, departament }: Props) => {
         });
       });
 
-      // Настраиваем ширину колонок (опционально)
-      // worksheet.columns = worksheet.columns || [];
-      // for (let i = 1; i <= 10; i++) {
-      //   if (
-      //     !worksheet.getColumn(i)?.width ||
-      //     worksheet.getColumn(i).width < 15
-      //   ) {
-      //     worksheet.getColumn(i).width = 15;
-      //   }
-      // }
-
-      // Генерируем файл
       const buffer = await workbook.xlsx.writeBuffer();
 
-      // Создаем Blob и скачиваем
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });

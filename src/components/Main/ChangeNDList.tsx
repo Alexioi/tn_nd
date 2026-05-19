@@ -73,7 +73,10 @@ const ChangeNDList = ({ isOpen, item, index, title, setIsOpen }: Props) => {
       title={title}
       open={isOpen}
       onOk={() => {
-        if (data.find((el) => el.designation === designation) !== undefined) {
+        if (
+          data.find((el) => el.designation === designation) !== undefined &&
+          index === undefined
+        ) {
           return;
         }
 
